@@ -1,0 +1,662 @@
+/* ========================================================= */
+/* 2. Estilos Globais e Variáveis de Cor (Paleta Soft Retro) */
+/* ========================================================= */
+:root {
+    --color-primary: #AA6148;      /* Marrom Principal */
+    --color-secondary: #E4C8A9;    /* Bege Secundário (Para Cards/Fundo) */
+    --color-background: #F5EAE0;   /* Fundo da Página (Bege Claro) */
+    --color-text: #333333;         /* Texto Escuro */
+    --color-light-shadow: rgba(170, 97, 72, 0.2); /* Sombra suave */
+    --color-cart-badge: #ff5e5e;   /* Vermelho para o contador */
+
+    --border-radius-large: 12px;
+    --border-radius-small: 8px;
+    --transition-speed: 0.3s;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.6;
+    
+    /* Configuração inicial para FADE-IN DA PÁGINA */
+    opacity: 0;
+    transition: opacity 1s ease-out; 
+}
+
+/* Classe que será adicionada pelo JavaScript para tornar o body visível */
+.body-loaded {
+    opacity: 1;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-primary);
+}
+
+/* Esconde elementos visualmente, mas mantém para leitores de tela */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* ========================================================= */
+/* 3. Header e Navegação */
+/* ========================================================= */
+.header-top {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: var(--color-secondary);
+    padding: 15px 30px;
+    border-bottom: 2px solid var(--color-primary);
+    box-shadow: 0 2px 5px var(--color-light-shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Georgia', serif; 
+    font-size: 1.8em;
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+/* Barra de Busca */
+.search-bar-container {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    max-width: 400px;
+    margin: 0 20px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px 50px 10px 20px; 
+    border: 1px solid var(--color-primary);
+    border-radius: 5px;
+    background-color: var(--color-background);
+    transition: var(--transition-speed);
+}
+
+.search-btn {
+    position: absolute;
+    right: 5px;
+    background: transparent;
+    border: none;
+    color: var(--color-primary);
+    font-size: 1.2em;
+    padding: 8px;
+    cursor: pointer;
+    transition: var(--transition-speed);
+}
+
+.search-btn:hover {
+    opacity: 0.7;
+}
+
+/* Ícones de Ação (Carrinho, Login) */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon-link {
+    font-size: 1.6em;
+    padding: 8px;
+    border-radius: var(--border-radius-small);
+    transition: var(--transition-speed);
+}
+
+.icon-link:hover {
+    background-color: rgba(170, 97, 72, 0.1);
+}
+
+/* Estilo específico para o botão de Logar/Usuário com texto */
+.user-state-toggle {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px; /* Aumenta o padding para o texto */
+    gap: 5px;
+    font-size: 1.1em; 
+    font-weight: 500;
+}
+
+.user-state-toggle .user-icon {
+    font-size: 1.6em; 
+}
+
+.auth-text {
+    white-space: nowrap; /* Garante que o texto não quebre */
+    font-size: 0.9em;
+    color: var(--color-text);
+}
+
+/* Contador de Carrinho (Removido do HTML, mas mantido caso queira reintroduzir) */
+.cart-link {
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--color-cart-badge);
+    color: white;
+    font-size: 0.7em;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 2px 5px;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* ========================================================= */
+/* 4. Carrossel Principal */
+/* ========================================================= */
+.carousel-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 20px auto;
+    overflow: hidden;
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 4px 10px var(--color-light-shadow);
+    /* Cor de fundo para o carrossel, semelhante à imagem */
+    background-color: #A08C80;
+}
+
+.carousel-slide {
+    display: flex;
+    transition: transform 0.5s ease-in-out; 
+}
+
+.carousel-item {
+    min-width: 100%;
+    height: 350px; /* Mantém a altura total do slide */
+    
+    /* Centraliza e organiza o conteúdo (título, imagem, categoria) */
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* TÍTULO DO PRODUTO */
+.carousel-titulo {
+    font-size: 1.8em; 
+    color: var(--color-text); 
+    margin-bottom: 5px;
+}
+
+/* CATEGORIA DO PRODUTO */
+.carousel-categoria {
+    font-size: 1em;
+    color: var(--color-primary); 
+    margin-bottom: 10px;
+}
+
+/* IMAGEM DO PRODUTO: FIXA EM 100x100 */
+.carousel-imagem {
+    /* **GARANTE O TAMANHO FIXO** */
+    width: auto; 
+    height: auto;
+    
+    /* **CRUCIAL: Garante que a imagem preencha o quadrado (cortando se necessário)** */
+    object-fit: cover; 
+    
+    /* Estilo Adicional */
+    border-radius: 50%; /* Sugestão: Deixar circular para dar um destaque diferente */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 15px 0;
+    border: 3px solid white; 
+    outline: 2px solid var(--color-primary); 
+}
+
+/* Estilos Corrigidos para as SETAS (Posicionamento nas Bordas) */
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--color-background); 
+    color: var(--color-primary);
+    border: none;
+    padding: 10px 5px; 
+    cursor: pointer;
+    z-index: 10;
+    font-size: 1.5em;
+    width: 40px; /* Largura da seta */
+    height: 70px; /* Altura da seta */
+    transition: opacity var(--transition-speed), background-color var(--transition-speed);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.prev {
+    left: 0;
+    border-top-right-radius: var(--border-radius-small);
+    border-bottom-right-radius: var(--border-radius-small);
+    border-left: none;
+}
+
+.next {
+    right: 0;
+    border-top-left-radius: var(--border-radius-small);
+    border-bottom-left-radius: var(--border-radius-small);
+    border-right: none;
+}
+
+.prev:hover, .next:hover {
+    background-color: white;
+    opacity: 1;
+}
+
+
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    color: var(--color-primary);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 1.5em;
+    border-radius: var(--border-radius-small);
+    transition: opacity var(--transition-speed);
+}
+/* ========================================================= */
+/* 5. Seções de Conteúdo (Categorias, Produtos, Lojas) */
+/* ========================================================= */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.section-title {
+    color: var(--color-primary);
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    border-bottom: 3px solid var(--color-secondary);
+    padding-bottom: 5px;
+}
+
+/* Layout de Grid */
+.grid {
+    display: grid;
+    gap: 20px;
+    padding-bottom: 40px;
+}
+
+/* Categoria: Ícones arredondados */
+.category-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.category-card {
+    background-color: var(--color-secondary);
+    border-radius: var(--border-radius-large);
+    padding: 20px 10px;
+    text-align: center;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    box-shadow: 0 2px 4px var(--color-light-shadow);
+    display: block; 
+}
+
+.category-card:hover {
+    transform: translateY(-5px) scale(1.02); 
+    box-shadow: 0 6px 12px var(--color-light-shadow);
+}
+
+.category-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--color-primary);
+    border-radius: 50%; 
+    margin: 0 auto 10px;
+}
+
+/* Produtos: Cards */
+.product-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.product-card {
+    background-color: white;
+    border-radius: var(--border-radius-large);
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 2px 5px var(--color-light-shadow);
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px var(--color-light-shadow);
+}
+
+.product-image {
+    height: 180px;
+    background-color: var(--color-secondary);
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.product-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.product-info {
+    padding: 15px;
+}
+
+.product-price {
+    font-size: 1.5em;
+    color: var(--color-primary);
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.add-to-cart-btn {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    transition: background-color var(--transition-speed);
+    width: 100%; 
+}
+
+.add-to-cart-btn:hover {
+    background-color: #7D4C38;
+}
+
+/* Estabelecimentos: Lista */
+.shop-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.shop-card {
+    background-color: var(--color-secondary);
+    padding: 15px;
+    border-radius: var(--border-radius-large);
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px var(--color-light-shadow);
+    transition: opacity var(--transition-speed);
+}
+
+.shop-card:hover {
+    opacity: 0.85;
+}
+
+.shop-logo {
+    width: 50px;
+    height: 50px;
+    background-color: var(--color-primary);
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+/* ========================================================= */
+/* 6. Rodapé */
+/* ========================================================= */
+.footer {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 15px;
+}
+
+.footer-links a {
+    color: white;
+    opacity: 0.8;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+}
+
+/* ========================================================= */
+/* 7. Responsividade e Animação */
+/* ========================================================= */
+
+/* Tablet e Mobile */
+@media (max-width: 768px) {
+    .header-top {
+        padding: 10px 15px;
+        flex-wrap: wrap;
+    }
+
+    .logo {
+        font-size: 1.5em;
+    }
+
+    .search-bar-container {
+        order: 3; 
+        width: 100%;
+        margin: 10px 0 0;
+    }
+    
+    .nav-actions {
+        order: 2;
+    }
+
+    .carousel-item {
+        height: 250px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+    
+    .category-grid {
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+    
+    .shop-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* Animação de Rolagem (Fade-In de elementos internos) */
+.carousel-container, .section-title, .grid, .shop-list {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-out, transform 0.8s ease-out;
+}
+
+.visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* Produtos: Cards */
+.product-grid {
+    /* ALTERADO: Garante 4 colunas iguais em telas grandes */
+    grid-template-columns: repeat(4, 1fr); 
+    /* grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); <--- ESTE FOI SUBSTIUÍDO */
+}
+
+/* NOVO: Container para centralizar o botão "Ver Mais" */
+.view-more-btn-container {
+    text-align: center;
+    padding: 20px 0 60px; /* Adiciona padding para separação */
+}
+
+.view-more-btn {
+    padding: 12px 25px;
+    background-color: var(--color-primary); /* Usa a cor primária */
+    color: white;
+    text-decoration: none;
+    border-radius: var(--border-radius-large);
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+    display: inline-block; /* Garante que o padding funcione */
+}
+
+.view-more-btn:hover {
+    background-color: #7D4C38; /* Tom mais escuro do primary */
+    transform: translateY(-2px);
+}
+
+/* ... SEUS ESTILOS EXISTENTES ... */
+
+/* Tablet e Mobile */
+@media (max-width: 768px) {
+    /* ... estilos existentes ... */
+    
+    .product-grid {
+        /* MANTIDO: 2 colunas em telas menores */
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+    
+    /* ... estilos existentes ... */
+}
+
+/* Produtos: Garante 4 colunas iguais em telas grandes */
+.product-grid {
+    grid-template-columns: repeat(4, 1fr); 
+}
+
+/* NOVO: Container para centralizar o botão "Ver Mais" (tanto para produtos quanto para lojas) */
+.view-more-btn-container {
+    text-align: center;
+    padding: 20px 0 60px; /* Adiciona padding para separação */
+}
+
+.view-more-btn {
+    padding: 12px 25px;
+    background-color: var(--color-primary); /* Usa a cor primária */
+    color: white;
+    text-decoration: none;
+    border-radius: var(--border-radius-large);
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+    display: inline-block; /* Garante que o padding funcione */
+}
+
+.view-more-btn:hover {
+    background-color: #7D4C38; /* Tom mais escuro do primary */
+    transform: translateY(-2px);
+}
+
+/* Adaptando o product-grid para 2 colunas em telas menores (se já não estiver no seu CSS) */
+@media (max-width: 768px) {
+    /* ... outros estilos de media query ... */
+    
+    .product-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
+
+.category-card .category-icon {
+    font-size: 3em; /* Ajuste o tamanho do emoji/ícone */
+    margin-bottom: 5px;
+    line-height: 1; /* Alinha o emoji */
+}
+
+/* Garante que o grid de categorias tenha 6 colunas ou menos */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); 
+    gap: 20px;
+    padding: 20px 0;
+}
+
+/* Opcional: Se quiser exatamente 6 colunas em telas grandes */
+@media (min-width: 1200px) {
+    .category-grid {
+        grid-template-columns: repeat(6, 1fr); 
+    }
+}
+
+/* Exemplo de CSS para os novos elementos do carrossel */
+.carousel-item {
+    /* Manter a altura e largura dos itens originais */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    /* Adicione um pouco de espaço para não preencher a tela se o estilo original não for absoluto */
+}
+
+.carousel-imagem {
+    max-width: 80%; /* Garante que a imagem caiba no item */
+    max-height: 80%; 
+    height: auto;
+    object-fit: contain; /* Ajusta a imagem sem cortá-la */
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+}
+
+.carousel-titulo {
+    font-size: 1.5em;
+    color: #6B4423; /* Marrom Escuro do seu tema */
+    margin-bottom: 5px;
+}
+
+.carousel-categoria {
+    font-size: 0.9em;
+    color: #A0522D; /* Marrom Ação do seu tema */
+    margin-bottom: 10px;
+}
