@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if ($stmt_cria->execute()) {
             // Pega o ID do pedido recém-criado
-            $_SESSION['cd_pedido_ativo'] = $mysqli->insert_id;
+            $_SESSION['ds_status_pedido'] = $mysqli->insert_id;
         } else {
             // Erro ao criar pedido
             $mensagem = "❌ Erro ao criar novo pedido: " . $stmt_cria->error;

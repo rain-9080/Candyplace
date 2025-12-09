@@ -93,16 +93,23 @@ $mysqli->close(); // Fecha a conexão
                     $ds_imagem = $produto['ds_imagem'] ?: 'placeholders/default.jpg'; 
                     $preco_aria = str_replace('.', ' e ', str_replace(',', ' centavos', $vl_preco));
             ?>
-            <a href="<?php echo $link_produto; ?>" class="product-card">
-                <figure class="product-image">
-                    <img src="<?php echo $ds_imagem; ?>" alt="<?php echo $nm_produto; ?> da <?php echo $nm_loja; ?>" loading="lazy">
-                </figure>
-                <div class="product-info">
-                    <h3><?php echo $nm_produto; ?></h3>
-                    <p class="product-vendor"><?php echo $nm_loja; ?></p>
-                    <div class="product-price" aria-label="Preço: R$ <?php echo $preco_aria; ?>">R$ <?php echo $vl_preco; ?></div>
-                    <button type="button" class="add-to-cart-btn" data-product-id="<?php echo $cd_produto; ?>" aria-label="Adicionar <?php echo $nm_produto; ?> ao carrinho">Adicionar</button>
-                </div>
+            <div class="product-card">
+                <a class="product-link">
+                    <figure class="product-image">
+                        <img src="<?php echo $ds_imagem; ?>" alt="<?php echo $nm_produto; ?> da <?php echo $nm_loja; ?>" loading="lazy">
+                    </figure>
+                    <div class="product-info">
+                        <h3><?php echo $nm_produto; ?></h3>
+                        <p class="product-vendor"><?php echo $nm_loja; ?></p>
+                        <div class="product-price" aria-label="Preço: R$ <?php echo $preco_aria; ?>">R$ <?php echo $vl_preco; ?></div>
+                    </div>
+                </a>
+                
+                <form method="post" action="add_cart.php">
+                    <input type="hidden" name="cd_produto" value="<?php echo $cd_produto; ?>">
+                    <input type="hidden" name="qt_produto" value="1"> <button type="submit" class="add-to-cart-btn" aria-label="Adicionar 1 unidade de <?php echo $nm_produto; ?> ao carrinho">Adicionar</button>
+                </form>
+            </div>
             </a>
             <?php 
                 endforeach;

@@ -236,7 +236,7 @@ a {
     border-radius: 50%; /* Sugestão: Deixar circular para dar um destaque diferente */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin: 15px 0;
-    border: 3px solid white; 
+    border: 10px solid white; 
     outline: 2px solid var(--color-primary); 
 }
 

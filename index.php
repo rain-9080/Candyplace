@@ -69,44 +69,6 @@ if ($mysqli && $stmt_produtos = $mysqli->prepare($sql_produtos)) {
     }
 }
 
-
-// =========================================================
-// 3. BUSCA LOJAS (PRÓXIMAS: MAX 4 + 1)
-// =========================================================
-$lojas = []; 
-$limite_lojas = 4;
-$tem_mais_lojas = false; 
-
-$sql_lojas = "
-    SELECT 
-        cd_loja, 
-        nm_loja
-    FROM 
-        cadastro_loja
-    WHERE
-        status_loja = 'Ativa'
-    ORDER BY 
-        cd_loja DESC 
-    LIMIT " . ($limite_lojas + 1);
-
-// Verifica se a conexão e o preparo foram bem-sucedidos
-if ($mysqli && $stmt_lojas = $mysqli->prepare($sql_lojas)) {
-    $stmt_lojas->execute();
-    $resultado_lojas = $stmt_lojas->get_result();
-
-    while ($loja = $resultado_lojas->fetch_assoc()) {
-        $lojas[] = $loja;
-    }
-
-    $stmt_lojas->close();
-
-    if (count($lojas) > $limite_lojas) {
-        $tem_mais_lojas = true;
-        array_pop($lojas);
-    }
-}
-
-
 // FECHANDO A CONEXÃO
 if ($mysqli) {
     $mysqli->close(); 
@@ -222,7 +184,7 @@ if ($mysqli) {
                     $preco_aria = str_replace('.', ' e ', str_replace(',', ' centavos', $vl_preco));
             ?>
             <div class="product-card">
-                <a href="<?php echo $link_produto; ?>" class="product-link">
+                <a class="product-link">
                     <figure class="product-image">
                         <img src="<?php echo $ds_imagem; ?>" alt="<?php echo $nm_produto; ?> da <?php echo $nm_loja; ?>" loading="lazy">
                     </figure>
@@ -250,26 +212,6 @@ if ($mysqli) {
             </div>
         <?php endif; ?>
         
-        <h2 class="section-title">🏪 Lojas Próximas</h2>
-        <section class="shop-list" aria-labelledby="local-shops-title">
-            <?php 
-            if (empty($lojas)): 
-            ?>
-                <p>Nenhuma loja ativa encontrada na sua região. 😔</p>
-            <?php
-            else:
-                foreach ($lojas as $loja): 
-                    $cd_loja = $loja['cd_loja'];
-                    $nm_loja = htmlspecialchars($loja['nm_loja']);
-                    $link_loja = "loja_detalhe.php?id=" . $cd_loja; 
-            ?>
-            <a href="<?php echo $link_loja; ?>" class="shop-card">
-                <div class="shop-logo"></div> <span><?php echo $nm_loja; ?></span>
-            </a>
-            <?php 
-                endforeach;
-            endif;
-            ?>
         </section>
 
         <?php if (isset($tem_mais_lojas) && $tem_mais_lojas): ?>

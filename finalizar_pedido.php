@@ -155,7 +155,7 @@ if (isset($_POST['finalizar_pedido']) && $pode_finalizar) {
         }
 
         // 6c. Monta a mensagem final completa
-        $data_pedido = date('d/m/Y H:i:s');
+        $data_pedido = date('d/m/Y h:i:s');
         $nome_cliente = $_SESSION['nm_usuario'];
         $total_formatado = number_format($total, 2, ',', '.');
         $subtotal_formatado = number_format($subtotal, 2, ',', '.');
