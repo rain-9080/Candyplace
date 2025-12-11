@@ -2,7 +2,7 @@
 include 'db_connect.php'; 
 session_start();
 
-// 1. VERIFICAÇÃO DE SESSÃO (Apenas Lojistas)
+// VERIFICAÇÃO DE SESSÃO (Apenas Lojistas)
 if (!isset($_SESSION['logado']) || $_SESSION['tipo_usuario'] !== 'loja') {
     header("Location: login_loja.php");
     exit();
@@ -24,7 +24,7 @@ $sucesso = false;
 $msg_final = "";
 
 try {
-    // 2. EXCLUSÃO DA CHAVE ESTRANGEIRA (TABELA ITENS)
+    // EXCLUSÃO DA CHAVE ESTRANGEIRA (TABELA ITENS)
     // Deleta TODOS os registros na tabela 'itens' que fazem referência ao produto (carrinhos e pedidos antigos/ativos).
     $sql_delete_itens = "DELETE FROM itens WHERE cd_produto = ?";
     $stmt_itens = $mysqli->prepare($sql_delete_itens);
@@ -37,7 +37,7 @@ try {
     $itens_removidos = $stmt_itens->affected_rows;
     $stmt_itens->close();
 
-    // 3. EXCLUSÃO DO PRODUTO (TABELA PRODUTO)
+    // EXCLUSÃO DO PRODUTO (TABELA PRODUTO)
     // Deleta o produto APENAS se o ID do produto E o ID da loja logada coincidirem.
     $sql_delete_produto = "DELETE FROM produto WHERE cd_produto = ? AND cd_loja = ?";
     $stmt_produto = $mysqli->prepare($sql_delete_produto);
@@ -59,7 +59,7 @@ try {
     
     $stmt_produto->close();
 
-    // 4. FINALIZAR TRANSAÇÃO
+    // FINALIZAR TRANSAÇÃO
     if ($sucesso) {
         $mysqli->commit(); // Confirma as operações de exclusão
     } else {
@@ -77,7 +77,7 @@ try {
 
 $mysqli->close();
 
-// 6. REDIRECIONA DE VOLTA PARA O PAINEL DE PRODUTOS
+// REDIRECIONA DE VOLTA PARA O PAINEL DE PRODUTOS
 header("Location: painel_loja.php?aba=produtos");
 exit();
 ?>

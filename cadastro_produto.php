@@ -2,7 +2,7 @@
 include 'db_connect.php';
 session_start();
 
-// 1. VERIFICAÇÃO DE ACESSO (APENAS LOJAS)
+//  VERIFICAÇÃO DE ACESSO (APENAS LOJAS)
 if (!isset($_SESSION['logado']) || $_SESSION['tipo_usuario'] !== 'loja') {
     header("Location: login_loja.php");
     exit();
@@ -19,13 +19,13 @@ if (!is_dir($diretorio_uploads)) {
 }
 
 
-// 5. PROCESSAMENTO DE EDIÇÃO (READ - para popular o formulário)
+//  PROCESSAMENTO DE EDIÇÃO (READ - para popular o formulário) (Identificação se o usuario esta tentando editar o produto)
 $produto_para_edicao = null;
 $id_produto_edit = 0; // Inicializa a variável para o bloco POST
 
 if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['id'])) {
     $id_produto_edit = intval($_GET['id']);
-    // CORRIGIDO: Usando o nome correto da tabela: 'produto'
+
     $sql = "SELECT * FROM produto WHERE cd_produto = ? AND cd_loja = ?"; 
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("ii", $id_produto_edit, $cd_loja_logada);
@@ -41,7 +41,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['id'])) {
 }
 
 
-// 3. PROCESSAMENTO DO FORMULÁRIO (CREATE & UPDATE)
+//  PROCESSAMENTO DO FORMULÁRIO (CREATE & UPDATE)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nm_produto = $mysqli->real_escape_string($_POST['nm_produto']);
     $ds_produto = $mysqli->real_escape_string($_POST['ds_produto']);
@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Se estiver editando, precisamos carregar os dados antigos novamente
     if ($cd_produto_edit > 0) {
-        // CORRIGIDO: Usando o nome correto da tabela: 'produto'
+
         $sql_get_old = "SELECT ds_imagem FROM produto WHERE cd_produto = ? AND cd_loja = ?"; 
         $stmt_get_old = $mysqli->prepare($sql_get_old);
         $stmt_get_old->bind_param("ii", $cd_produto_edit, $cd_loja_logada);
@@ -96,14 +96,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if ($cd_produto_edit > 0) {
         // OPERAÇÃO UPDATE
-        // CORRIGIDO: Usando o nome correto da tabela: 'produto'
+
         $sql = "UPDATE produto SET nm_produto=?, ds_produto=?, ds_categoria=?, vl_preco=?, qt_estoque=?, ds_imagem=? WHERE cd_produto=? AND cd_loja=?";
         $stmt = $mysqli->prepare($sql);
         $stmt->bind_param("sssdssii", $nm_produto, $ds_produto, $ds_categoria, $vl_preco, $qt_estoque, $ds_imagem, $cd_produto_edit, $cd_loja_logada);
         $acao = "atualizado";
     } else {
         // OPERAÇÃO CREATE
-        // CORRIGIDO: Usando o nome correto da tabela: 'produto'
+   
         $sql = "INSERT INTO produto (cd_loja, nm_produto, ds_produto, ds_categoria, vl_preco, qt_estoque, ds_imagem) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $mysqli->prepare($sql); 
         $stmt->bind_param("isssdss", $cd_loja_logada, $nm_produto, $ds_produto, $ds_categoria, $vl_preco, $qt_estoque, $ds_imagem);
@@ -131,7 +131,7 @@ $mysqli->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Produtos - Loja <?php echo $_SESSION['nm_usuario']; ?></title>
     <style>
-        /* Paleta de Cores baseada no seu site: */
+
         :root {
             --cor-principal-fundo: #F8EFE4; 
             --cor-container-fundo: #FFFFFF;
@@ -146,7 +146,7 @@ $mysqli->close();
             background-color: var(--cor-principal-fundo);
         }
         
-        /* Cabeçalho superior (Replicado do Painel da Loja) */
+        /* Cabeçalho */
         .header-loja { 
             background-color: var(--cor-marrom-acao);
             color: white; 
@@ -185,7 +185,7 @@ $mysqli->close();
         
         /* Estilos de Formulário */
         .form-container { 
-            background: #FDFBF8; /* Fundo levemente mais claro */
+            background: #FDFBF8; 
             padding: 25px; 
             border: 1px solid var(--cor-borda); 
             border-radius: 6px;

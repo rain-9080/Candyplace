@@ -4,7 +4,7 @@ include 'db_connect.php'; // Inclui o arquivo de conexão
 $mensagem = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // 1. Coleta e sanitiza os dados do formulário
+    //  Coleta e sanitiza os dados do formulário (Impede execuções de códigos JS malicios nos campos de formulario)
     $cd_cnpj = $mysqli->real_escape_string($_POST['cnpj']);
     $nm_razao_social = $mysqli->real_escape_string($_POST['razao_social']);
     $nm_loja = $mysqli->real_escape_string($_POST['nome_fantasia']);
@@ -23,10 +23,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Status Padrão para nova loja
     $status_loja = 'Ativa';
 
-    // 2. Hashing da Senha
+    //  Hashing da Senha
     $ds_senha_hash = password_hash($ds_senha_crua, PASSWORD_DEFAULT);
 
-    // 3. Prepared Statement para inserção
+    // Prepared Statement para inserção
     $sql = "INSERT INTO cadastro_loja (cd_cnpj, nm_razao_social, nm_loja, ds_email, nr_telefone, ds_senha, sg_estado, nm_cidade, nm_bairro, ds_endereco, cd_cep, franquia, status_loja) 
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -59,12 +59,12 @@ $mysqli->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Loja - CandyPlace</title>
     <style>
-        /* Paleta de Cores (Consistente com as demais páginas) */
+
         :root {
             --cor-principal-fundo: #F8EFE4; 
             --cor-container-fundo: #FFFFFF;
-            --cor-marrom-acao: #A0522D;     /* Ação principal/Botão */
-            --cor-marrom-escuro: #6B4423;   /* Textos/Títulos */
+            --cor-marrom-acao: #A0522D;     
+            --cor-marrom-escuro: #6B4423;   
             --cor-borda: #E0D4C5;
             --cor-verde-sucesso: #28A745;
             --cor-vermelho-erro: #DC3545;
@@ -73,18 +73,18 @@ $mysqli->close();
         body { 
             font-family: Arial, sans-serif; 
             margin: 0; 
-            padding: 20px 0; /* Padding vertical para formulários longos */
+            padding: 20px 0; 
             background-color: var(--cor-principal-fundo);
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Alinha no topo */
+            align-items: flex-start; 
             min-height: 100vh;
         }
 
         /* Container Principal do Cadastro (Um pouco maior que o login) */
         .cadastro-container {
             width: 90%;
-            max-width: 600px; /* Maior largura para acomodar o formulário */
+            max-width: 600px; 
             background-color: var(--cor-container-fundo); 
             border-radius: 8px; 
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 

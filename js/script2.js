@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const navbarHeight = navbar ? navbar.offsetHeight : 100;
     
     const navLinks = document.querySelectorAll('.nav-links a');
-    // Seleciona as seções de destino (incluindo o header/hero para o primeiro item)
+    // Seleciona as seções de destino incluindo o header/hero para o primeiro item
     const sections = document.querySelectorAll('header#hero, #feedback, #beneficios, #historia, #cadastro');
 
     /**
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     /**
-     * 3. Lógica de Animação de Scroll Reveal (Seção 2 do CSS)
+     *  Lógica de Animação de Scroll Reveal (Seção 2 do CSS)
      */
     const elementsToObserve = document.querySelectorAll('.slide-up-element, .scroll-fade-up, .scroll-fade-left, .scroll-fade-right, .fade-scale-element, .fade-in-delay-element, .feedback-card, .benefit-card, .cta-card, .story-content');
     
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     /**
-     * 4. Microinteraction/Parallax (Mantenha o código de animação do CTA e Parallax aqui, se desejar)
+     *  Microinteraction/Parallax (Mantenha o código de animação do CTA e Parallax aqui, se desejar)
      */
-    // ... Seu código de Parallax e Microinteraction do CTA pode continuar aqui.
+
 });

@@ -1,6 +1,6 @@
-/* ========================================================= */
-/* 2. Estilos Globais e Variáveis de Cor (Paleta Soft Retro) */
-/* ========================================================= */
+
+/* Estilos Globais e Variáveis de Cor (Paleta Soft Retro) */
+
 :root {
     --color-primary: #AA6148;      /* Marrom Principal */
     --color-secondary: #E4C8A9;    /* Bege Secundário (Para Cards/Fundo) */
@@ -53,9 +53,9 @@ a {
     border: 0;
 }
 
-/* ========================================================= */
-/* 3. Header e Navegação */
-/* ========================================================= */
+
+/* Header e Navegação */
+
 .header-top {
     position: sticky;
     top: 0;
@@ -74,47 +74,7 @@ a {
     font-size: 1.8em;
     color: var(--color-primary);
     font-weight: bold;
-}
-
-/* Barra de Busca */
-.search-bar-container {
-    display: flex;
-    flex-grow: 1;
-    justify-content: center;
-    max-width: 400px;
-    margin: 0 20px;
-}
-
-.search-bar {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    position: relative;
-}
-
-.search-bar input {
-    width: 100%;
-    padding: 10px 50px 10px 20px; 
-    border: 1px solid var(--color-primary);
-    border-radius: 5px;
-    background-color: var(--color-background);
-    transition: var(--transition-speed);
-}
-
-.search-btn {
-    position: absolute;
-    right: 5px;
-    background: transparent;
-    border: none;
-    color: var(--color-primary);
-    font-size: 1.2em;
-    padding: 8px;
-    cursor: pointer;
-    transition: var(--transition-speed);
-}
-
-.search-btn:hover {
-    opacity: 0.7;
+    
 }
 
 /* Ícones de Ação (Carrinho, Login) */
@@ -155,7 +115,6 @@ a {
     color: var(--color-text);
 }
 
-/* Contador de Carrinho (Removido do HTML, mas mantido caso queira reintroduzir) */
 .cart-link {
     position: relative;
 }
@@ -175,9 +134,8 @@ a {
     line-height: 1.2;
 }
 
-/* ========================================================= */
-/* 4. Carrossel Principal */
-/* ========================================================= */
+/* Carrossel Principal */
+
 .carousel-container {
     position: relative;
     max-width: 1200px;
@@ -185,7 +143,7 @@ a {
     overflow: hidden;
     border-radius: var(--border-radius-large);
     box-shadow: 0 4px 10px var(--color-light-shadow);
-    /* Cor de fundo para o carrossel, semelhante à imagem */
+
     background-color: #A08C80;
 }
 
@@ -223,24 +181,24 @@ a {
     margin-bottom: 10px;
 }
 
-/* IMAGEM DO PRODUTO: FIXA EM 100x100 */
+
 .carousel-imagem {
-    /* **GARANTE O TAMANHO FIXO** */
+
     width: auto; 
     height: auto;
     
-    /* **CRUCIAL: Garante que a imagem preencha o quadrado (cortando se necessário)** */
+
     object-fit: cover; 
     
-    /* Estilo Adicional */
-    border-radius: 50%; /* Sugestão: Deixar circular para dar um destaque diferente */
+
+    border-radius: 50%; 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin: 15px 0;
     border: 10px solid white; 
     outline: 2px solid var(--color-primary); 
 }
 
-/* Estilos Corrigidos para as SETAS (Posicionamento nas Bordas) */
+
 .prev, .next {
     position: absolute;
     top: 50%;
@@ -292,9 +250,9 @@ a {
     border-radius: var(--border-radius-small);
     transition: opacity var(--transition-speed);
 }
-/* ========================================================= */
-/* 5. Seções de Conteúdo (Categorias, Produtos, Lojas) */
-/* ========================================================= */
+
+/* Seções de Conteúdo (Categorias, Produtos, Lojas) */
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -435,9 +393,9 @@ a {
     margin-right: 15px;
 }
 
-/* ========================================================= */
-/* 6. Rodapé */
-/* ========================================================= */
+
+/* Rodapé */
+
 .footer {
     background-color: var(--color-primary);
     color: white;
@@ -461,9 +419,9 @@ a {
     opacity: 1;
 }
 
-/* ========================================================= */
-/* 7. Responsividade e Animação */
-/* ========================================================= */
+
+/* Responsividade e Animação */
+
 
 /* Tablet e Mobile */
 @media (max-width: 768px) {
@@ -526,12 +484,12 @@ a {
 
 /* Produtos: Cards */
 .product-grid {
-    /* ALTERADO: Garante 4 colunas iguais em telas grandes */
+
     grid-template-columns: repeat(4, 1fr); 
     /* grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); <--- ESTE FOI SUBSTIUÍDO */
 }
 
-/* NOVO: Container para centralizar o botão "Ver Mais" */
+
 .view-more-btn-container {
     text-align: center;
     padding: 20px 0 60px; /* Adiciona padding para separação */
@@ -539,33 +497,33 @@ a {
 
 .view-more-btn {
     padding: 12px 25px;
-    background-color: var(--color-primary); /* Usa a cor primária */
+    background-color: var(--color-primary); 
     color: white;
     text-decoration: none;
     border-radius: var(--border-radius-large);
     font-weight: bold;
     font-size: 1.1em;
     transition: background-color var(--transition-speed), transform var(--transition-speed);
-    display: inline-block; /* Garante que o padding funcione */
+    display: inline-block; 
 }
 
 .view-more-btn:hover {
-    background-color: #7D4C38; /* Tom mais escuro do primary */
+    background-color: #7D4C38; 
     transform: translateY(-2px);
 }
 
-/* ... SEUS ESTILOS EXISTENTES ... */
+
 
 /* Tablet e Mobile */
 @media (max-width: 768px) {
-    /* ... estilos existentes ... */
+
     
     .product-grid {
-        /* MANTIDO: 2 colunas em telas menores */
+
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     }
     
-    /* ... estilos existentes ... */
+
 }
 
 /* Produtos: Garante 4 colunas iguais em telas grandes */
@@ -573,7 +531,7 @@ a {
     grid-template-columns: repeat(4, 1fr); 
 }
 
-/* NOVO: Container para centralizar o botão "Ver Mais" (tanto para produtos quanto para lojas) */
+
 .view-more-btn-container {
     text-align: center;
     padding: 20px 0 60px; /* Adiciona padding para separação */
@@ -588,17 +546,17 @@ a {
     font-weight: bold;
     font-size: 1.1em;
     transition: background-color var(--transition-speed), transform var(--transition-speed);
-    display: inline-block; /* Garante que o padding funcione */
+    display: inline-block; 
 }
 
 .view-more-btn:hover {
-    background-color: #7D4C38; /* Tom mais escuro do primary */
+    background-color: #7D4C38; 
     transform: translateY(-2px);
 }
 
 /* Adaptando o product-grid para 2 colunas em telas menores (se já não estiver no seu CSS) */
 @media (max-width: 768px) {
-    /* ... outros estilos de media query ... */
+
     
     .product-grid {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -611,7 +569,7 @@ a {
     line-height: 1; /* Alinha o emoji */
 }
 
-/* Garante que o grid de categorias tenha 6 colunas ou menos */
+
 .category-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); 
@@ -619,14 +577,14 @@ a {
     padding: 20px 0;
 }
 
-/* Opcional: Se quiser exatamente 6 colunas em telas grandes */
+
 @media (min-width: 1200px) {
     .category-grid {
         grid-template-columns: repeat(6, 1fr); 
     }
 }
 
-/* Exemplo de CSS para os novos elementos do carrossel */
+
 .carousel-item {
     /* Manter a altura e largura dos itens originais */
     display: flex;
@@ -636,14 +594,14 @@ a {
     text-align: center;
     padding: 20px;
     box-sizing: border-box;
-    /* Adicione um pouco de espaço para não preencher a tela se o estilo original não for absoluto */
+   
 }
 
 .carousel-imagem {
-    max-width: 80%; /* Garante que a imagem caiba no item */
+    max-width: 80%; 
     max-height: 80%; 
     height: auto;
-    object-fit: contain; /* Ajusta a imagem sem cortá-la */
+    object-fit: contain; 
     border-radius: 6px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-top: 10px;
@@ -651,12 +609,12 @@ a {
 
 .carousel-titulo {
     font-size: 1.5em;
-    color: #6B4423; /* Marrom Escuro do seu tema */
+    color: #6B4423; 
     margin-bottom: 5px;
 }
 
 .carousel-categoria {
     font-size: 0.9em;
-    color: #A0522D; /* Marrom Ação do seu tema */
+    color: #A0522D; 
     margin-bottom: 10px;
 }

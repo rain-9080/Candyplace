@@ -1,9 +1,8 @@
 <?php
-// ATENÇÃO: A linha abaixo da tag <?php deve ser a primeira instrução de código.
 include 'db_connect.php';
 session_start();
 
-// 1. VERIFICAÇÃO DE SESSÃO E CARRINHO ATIVO (Redirecionamentos no TOPO)
+// VERIFICAÇÃO DE SESSÃO E CARRINHO ATIVO (Redirecionamentos no TOPO)
 if (!isset($_SESSION['logado']) || $_SESSION['tipo_usuario'] !== 'cliente') {
     header("Location: login_cliente.php");
     exit();
@@ -25,7 +24,7 @@ $total = 0.00;
 $cd_loja = null; // Variável para armazenar o ID da loja
 $mensagem_final = ''; // Inicializa a variável de mensagem de erro
 
-// 2. BUSCA ITENS DO PEDIDO (CARRINHO)
+// BUSCA ITENS DO PEDIDO (CARRINHO)
 $sql_itens = "
     SELECT 
         i.qt_produto, 
@@ -36,7 +35,7 @@ $sql_itens = "
     FROM itens i
     JOIN produto p ON i.cd_produto = p.cd_produto
     WHERE i.cd_pedido = ?
-"; // Mantido multi-linha para legibilidade do SQL
+"; 
 
 $stmt_itens = $mysqli->prepare($sql_itens);
 $stmt_itens->bind_param("i", $cd_pedido);
@@ -65,7 +64,7 @@ if ($resultado_itens->num_rows > 0) {
 $stmt_itens->close();
 $total = $subtotal + $frete;
 
-// 3. BUSCA ENDEREÇOS DO CLIENTE
+// BUSCA ENDEREÇOS DO CLIENTE
 $sql_enderecos = "SELECT cd_endereco, ds_endereco, nm_bairro, nm_cidade, cd_cep FROM endereco_cliente WHERE cd_cliente = ?";
 $stmt_endereco = $mysqli->prepare($sql_enderecos);
 $stmt_endereco->bind_param("i", $cd_cliente);
@@ -82,7 +81,7 @@ $stmt_endereco->close();
 $pode_finalizar = !empty($enderecos_cliente); // Define a flag de finalização
 
 
-// 4. LÓGICA DE FINALIZAÇÃO (Quando o formulário é enviado)
+// LÓGICA DE FINALIZAÇÃO (Quando o formulário é enviado)
 if (isset($_POST['finalizar_pedido']) && $pode_finalizar) {
     
     $cd_endereco_selecionado = (int)$_POST['cd_endereco'];
@@ -99,7 +98,7 @@ if (isset($_POST['finalizar_pedido']) && $pode_finalizar) {
     // Define o status inicial
     $status_inicial = 'Aguardando Pagamento'; 
     
-    // 5. ATUALIZAÇÃO DA TABELA PEDIDO
+    // ATUALIZAÇÃO DA TABELA PEDIDO
     $sql_update_pedido = "
         UPDATE pedido SET 
             cd_loja = ?, 
@@ -130,11 +129,9 @@ if (isset($_POST['finalizar_pedido']) && $pode_finalizar) {
 
     if ($stmt_update->execute()) {
         
-        // =========================================================
-        // 6. INTEGRAÇÃO WHATSAPP
-        // =========================================================
+        // INTEGRAÇÃO WHATSAPP
 
-        // 6a. Busca o número do WhatsApp da Loja
+        // Busca o número do WhatsApp da Loja
         $sql_whatsapp = "SELECT nr_telefone FROM cadastro_loja WHERE cd_loja = ?";
         $stmt_whatsapp = $mysqli->prepare($sql_whatsapp);
         $stmt_whatsapp->bind_param("i", $cd_loja);
@@ -147,14 +144,14 @@ if (isset($_POST['finalizar_pedido']) && $pode_finalizar) {
         }
         $stmt_whatsapp->close();
 
-        // 6b. Monta a mensagem de itens
+        // Monta a mensagem de itens
         $itens_whatsapp = "";
         foreach ($itens_carrinho as $item) {
             $subtotal_item = $item['qt_produto'] * $item['vl_preco_unitario'];
             $itens_whatsapp .= "• Cod: {$item['cd_produto']} - {$item['nm_produto']} (x{$item['qt_produto']}) - Subtotal: R$ " . number_format($subtotal_item, 2, ',', '.') . "\n";
         }
 
-        // 6c. Monta a mensagem final completa
+        // Monta a mensagem final completa
         $data_pedido = date('d/m/Y h:i:s');
         $nome_cliente = $_SESSION['nm_usuario'];
         $total_formatado = number_format($total, 2, ',', '.');
@@ -181,7 +178,7 @@ if (isset($_POST['finalizar_pedido']) && $pode_finalizar) {
         $mensagem_whats .= "Data/Hora: {$data_pedido}";
 
 
-        // 6d. Limpa o carrinho ativo da sessão, fecha a conexão e redireciona.
+        // Limpa o carrinho ativo da sessão, fecha a conexão e redireciona.
         unset($_SESSION['cd_pedido_ativo']);
         
         // FECHAMENTO DA CONEXÃO DENTRO DA LÓGICA DE SUCESSO
@@ -201,9 +198,9 @@ if (isset($_POST['finalizar_pedido']) && $pode_finalizar) {
     }
     $stmt_update->close();
 }
-// Fim da Lógica de Finalização
 
-// Se o formulário NÃO foi enviado, a conexão é fechada aqui (após o uso em 3.)
+
+// Se o formulário NÃO foi enviado, a conexão é fechada aqui
 if ($mysqli) {
     // Verifica se a conexão já está fechada (caso tenha entrado na lógica POST)
     if (isset($mysqli->connect_errno) && $mysqli->connect_errno) {
@@ -213,7 +210,6 @@ if ($mysqli) {
     }
 }
 
-// A PARTIR DAQUI COMEÇA A SAÍDA HTML, NENHUM OUTRO HEADER PODE SER CHAMADO!
 ?>
 
 <!DOCTYPE html>
@@ -223,7 +219,7 @@ if ($mysqli) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finalizar Pedido - CandyPlace</title>
     <style>
-        /* Paleta de Cores baseada no seu site: */
+
         :root {
             --cor-principal-fundo: #F8EFE4; 
             --cor-container-fundo: #FFFFFF;
@@ -277,9 +273,9 @@ if ($mysqli) {
             margin-bottom: 15px;
         }
 
-        /* ========================================================= */
+
         /* TABELA DE RESUMO (Itens) */
-        /* ========================================================= */
+
         .resumo-tabela { 
             width: 100%; 
             border-collapse: collapse; 
@@ -320,9 +316,9 @@ if ($mysqli) {
             margin: 30px 0;
         }
 
-        /* ========================================================= */
+
         /* SELEÇÃO DE ENDEREÇO */
-        /* ========================================================= */
+
         .endereco-item { 
             margin-bottom: 10px; 
             border: 2px solid #EAEAEA; 
@@ -332,7 +328,7 @@ if ($mysqli) {
         }
         .endereco-item-checked { 
             border-color: var(--cor-marrom-acao) !important; 
-            background-color: #F8F4F0; /* Fundo suave */
+            background-color: #F8F4F0; 
         }
         .endereco-item input[type="radio"] {
             margin-right: 10px;
@@ -366,9 +362,9 @@ if ($mysqli) {
         }
 
 
-        /* ========================================================= */
+
         /* SELEÇÃO DE PAGAMENTO */
-        /* ========================================================= */
+
         .pagamento-opcoes {
             display: flex;
             flex-wrap: wrap;
@@ -397,9 +393,9 @@ if ($mysqli) {
             box-shadow: 0 0 5px rgba(160, 82, 45, 0.5);
         }
 
-        /* ========================================================= */
+
         /* BOTÃO FINALIZAR */
-        /* ========================================================= */
+
         .btn-finalizar {
             display: block;
             width: 100%;
@@ -526,7 +522,7 @@ if ($mysqli) {
     </div>
     
     <script>
-        // Lógica para selecionar o botão de pagamento (mantida e melhorada)
+        // Bloco para selecionar o botão de pagamento 
         document.querySelectorAll('.pagamento-opcoes button').forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault(); 
@@ -544,16 +540,13 @@ if ($mysqli) {
             });
         });
 
-        // Lógica para destacar o endereço selecionado
+        // Bloco para destacar o endereço selecionado
         document.querySelectorAll('input[name="cd_endereco"]').forEach(radio => {
             const itemDiv = radio.closest('.endereco-item');
             
-            // Adiciona a classe de destaque no carregamento se estiver checado
             if (radio.checked) {
                 itemDiv.classList.add('endereco-item-checked');
             }
-
-            // Remove e adiciona a classe de destaque na mudança
             radio.addEventListener('change', (e) => {
                 document.querySelectorAll('.endereco-item').forEach(d => d.classList.remove('endereco-item-checked'));
                 e.target.closest('.endereco-item').classList.add('endereco-item-checked');

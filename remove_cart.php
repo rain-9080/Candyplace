@@ -2,7 +2,7 @@
 include 'db_connect.php';
 session_start();
 
-// 1. VERIFICAÇÃO DE ACESSO
+// verificar o acesso
 if (!isset($_SESSION['logado']) || $_SESSION['tipo_usuario'] !== 'cliente') {
     header("Location: login_cliente.php");
     exit();
@@ -25,9 +25,9 @@ if ($cd_produto <= 0) {
 
 $mensagem = "";
 
-// =========================================================
-// 2. PROCESSAMENTO DA AÇÃO
-// =========================================================
+
+// bloco de delete de item
+
 
 try {
     // Busca a quantidade atual do item no carrinho
@@ -46,7 +46,7 @@ try {
     $qt_atual = $item['qt_produto'];
     $stmt_qt_atual->close();
 
-    // Ação 1: Deletar o item completamente (Botão X ou Remover Tudo)
+    // Deleta o item completamente 
     if ($action === 'delete_item') {
         $sql_delete = "DELETE FROM itens WHERE cd_pedido = ? AND cd_produto = ?";
         $stmt_delete = $mysqli->prepare($sql_delete);
@@ -55,7 +55,7 @@ try {
         $mensagem = "Item removido completamente do carrinho.";
         $stmt_delete->close();
 
-    // Ação 2: Remover apenas uma unidade (Botão -)
+    // Remove apenas uma unidade 
     } elseif ($action === 'remove_one') {
         if ($qt_atual > 1) {
             $qt_nova = $qt_atual - 1;
@@ -84,7 +84,7 @@ try {
 
 end_processing:
 $mysqli->close();
-// Redireciona de volta para o carrinho com status
+// Redireciona de volta para o carrinho
 header("Location: carrinho.php?status=" . urlencode($mensagem));
 exit();
 ?>

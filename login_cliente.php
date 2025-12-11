@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ds_email = $mysqli->real_escape_string($_POST['email']);
     $ds_senha_crua = $_POST['senha'];
 
-    // 1. Prepared Statement para buscar o cliente pelo email (chave de login)
+    // Prepared Statement para buscar o cliente pelo email (chave de login)
     $sql = "SELECT cd_cliente, nm_cliente, ds_senha FROM cadastro_cliente WHERE ds_email = ?";
     
     $stmt = $mysqli->prepare($sql);
@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cliente = $resultado->fetch_assoc();
         $ds_senha_hash = $cliente['ds_senha'];
 
-        // 2. Verifica a Senha (Usa password_verify para comparar o hash)
+        // Verifica a Senha (tem que usar o password_verify para comparar o hash se não da problema na comparação e vai ficar dando senha errada)
         if (password_verify($ds_senha_crua, $ds_senha_hash)) {
             // Sucesso no Login
             $_SESSION['logado'] = true;
@@ -28,9 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['cd_usuario'] = $cliente['cd_cliente'];
             $_SESSION['nm_usuario'] = $cliente['nm_cliente'];
             
-            // =========================================================
-            // LÓGICA DE RECUPERAÇÃO DO CARRINHO (PEDIDO ATIVO)
-            // =========================================================
+
+            // Bloco para recuperar o carrinho do cliente (PEDIDO ATIVO)
+
             $cd_cliente_logado = $cliente['cd_cliente'];
             
             // Procura por um pedido com status 'Carrinho' para este cliente
@@ -45,24 +45,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $pedido_ativo = $resultado_carrinho->fetch_assoc();
                 $_SESSION['cd_pedido_ativo'] = $pedido_ativo['cd_pedido'];
                 
-                // MENSAGEM ATUALIZADA COM CLASSE CSS
+                
                 $mensagem = "<p class='msg-sucesso'>✅ Login bem-sucedido! Carrinho recuperado. Redirecionando...</p>";
             } else {
-                // MENSAGEM ATUALIZADA COM CLASSE CSS
+                
                 $mensagem = "<p class='msg-sucesso'>✅ Login bem-sucedido! Redirecionando...</p>";
             }
             $stmt_carrinho->close();
-            // =========================================================
             
             // Redireciona para a página principal ou painel do cliente
             header("Location: index.php"); 
             exit();
         } else {
-            // MENSAGEM ATUALIZADA COM CLASSE CSS
+
             $mensagem = "<p class='msg-erro'>❌ Senha incorreta.</p>";
         }
     } else {
-        // MENSAGEM ATUALIZADA COM CLASSE CSS
+
         $mensagem = "<p class='msg-erro'>❌ E-mail não encontrado.</p>";
     }
     $stmt->close();
@@ -77,12 +76,12 @@ $mysqli->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login de Cliente - CandyPlace</title>
     <style>
-        /* Paleta de Cores (Consistente com as demais páginas) */
+
         :root {
             --cor-principal-fundo: #F8EFE4; 
             --cor-container-fundo: #FFFFFF;
-            --cor-marrom-acao: #A0522D;     /* Ação principal */
-            --cor-marrom-escuro: #6B4423;   /* Textos/Títulos */
+            --cor-marrom-acao: #A0522D;     
+            --cor-marrom-escuro: #6B4423;   
             --cor-borda: #E0D4C5;
             --cor-verde-sucesso: #28A745;
             --cor-vermelho-erro: #DC3545;
@@ -96,13 +95,13 @@ $mysqli->close();
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Garante que o container fique no centro vertical */
+            min-height: 100vh; 
         }
         
         /* Container Principal do Formulário */
         .login-container {
             width: 90%;
-            max-width: 400px; /* Limita a largura máxima */
+            max-width: 400px; 
             padding: 30px;
             background-color: var(--cor-container-fundo);
             border-radius: 8px;
@@ -173,7 +172,7 @@ $mysqli->close();
 
         /* Botão Principal */
         .btn-login {
-            display: block; /* Ocupa a largura total */
+            display: block; 
             width: 100%;
             padding: 15px; 
             background-color: var(--cor-marrom-acao); 
@@ -188,7 +187,7 @@ $mysqli->close();
             font-size: 1.1em;
         }
         .btn-login:hover {
-            background-color: var(--cor-marrom-escuro); /* Tom mais escuro */
+            background-color: var(--cor-marrom-escuro); 
         }
         
         /* Links de Navegação */

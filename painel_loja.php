@@ -2,7 +2,7 @@
 include 'db_connect.php'; 
 session_start();
 
-// 1. VERIFICAÇÃO DE SESSÃO DA LOJA
+// verificação de loja
 if (!isset($_SESSION['logado']) || $_SESSION['tipo_usuario'] !== 'loja') {
     header("Location: login_loja.php"); 
     exit();
@@ -11,16 +11,16 @@ if (!isset($_SESSION['logado']) || $_SESSION['tipo_usuario'] !== 'loja') {
 $cd_loja = $_SESSION['cd_usuario']; 
 $nm_loja = $_SESSION['nm_usuario'];
 $aba_ativa = isset($_GET['aba']) ? $_GET['aba'] : 'dashboard'; 
-$mensagem_config = ''; // Para exibir mensagens de sucesso ou erro na aba de configurações
+$mensagem_config = ''; 
 
-// 1.1. TRATAMENTO DE MENSAGENS DE SESSÃO (APÓS AÇÕES COMO EXCLUSÃO OU STATUS)
+// TRATAMENTO DE MENSAGENS DE SESSÃO (APÓS AÇÕES COMO EXCLUSÃO OU STATUS)
 $mensagem_sessao = '';
 if (isset($_SESSION['mensagem_loja'])) {
     $mensagem_sessao = $_SESSION['mensagem_loja'];
     unset($_SESSION['mensagem_loja']); // Limpa a mensagem após exibir
 }
 
-// 2. LÓGICA DE ATUALIZAÇÃO DE DADOS DA LOJA (Configurações)
+// LÓGICA DE ATUALIZAÇÃO DE DADOS DA LOJA (Configurações)
 if ($aba_ativa == 'configuracoes' && isset($_POST['atualizar_dados'])) {
     
     $nm_loja_novo = $mysqli->real_escape_string(trim($_POST['nm_loja']));
@@ -40,7 +40,7 @@ if ($aba_ativa == 'configuracoes' && isset($_POST['atualizar_dados'])) {
     $stmt->close();
 }
 
-// 3. BUSCA DADOS ATUAIS DA LOJA (para o sidebar e formulário de config)
+//  busca de dados para a sidebar
 $dados_loja = [];
 if ($stmt_dados = $mysqli->prepare("SELECT nm_razao_social, ds_email, nr_telefone FROM cadastro_loja WHERE cd_loja = ?")) {
     $stmt_dados->bind_param("i", $cd_loja);
@@ -51,20 +51,19 @@ if ($stmt_dados = $mysqli->prepare("SELECT nm_razao_social, ds_email, nr_telefon
 }
 
 
-// =========================================================
-// 4. LÓGICA DE AÇÕES DE PEDIDO (PENDENTE, ENTREGUE, EM PREPARAÇÃO)
-//    (CORREÇÃO INTEGRADA: Lógica robusta para mudança de status e redirecionamento)
-// =========================================================
+
+//  bloco para mudar o status do pedido (PENDENTE, ENTREGUE, EM PREPARAÇÃO)
+
 if (isset($_POST['acao_pedido'])) {
     $cd_pedido_alvo = isset($_POST['cd_pedido']) ? intval($_POST['cd_pedido']) : 0;
     $nova_status = $mysqli->real_escape_string($_POST['nova_status']);
     
-    // Statuses permitidos para mudança pela loja (Corrigido conforme pedido)
+    // mudança de status do produto
     $status_permitidos = ['Processando', 'Em Entrega', 'Entregue']; 
 
     if ($cd_pedido_alvo > 0 && in_array($nova_status, $status_permitidos)) {
         
-        // 1. Atualiza o status do pedido
+        // Atualiza o status do pedido
         $sql = "UPDATE pedido SET ds_status_pedido = ?, status_pedido = NOW() WHERE cd_pedido = ? AND cd_loja = ?";
         $stmt = $mysqli->prepare($sql);
         $stmt->bind_param("sii", $nova_status, $cd_pedido_alvo, $cd_loja);
@@ -88,13 +87,12 @@ if (isset($_POST['acao_pedido'])) {
 }
 
 
-// =========================================================
-// 5. FUNÇÕES DE CARREGAMENTO DE CONTEÚDO
-// =========================================================
+// Bloco para carregar o conteudo
 
-/**
+/*
  * Função principal para determinar qual conteúdo carregar.
  */
+
 function carregar_conteudo($aba, $mysqli, $cd_loja, $nm_loja, $dados_loja, $mensagem_config, $mensagem_sessao) {
     switch ($aba) {
         case 'dashboard':
@@ -110,9 +108,9 @@ function carregar_conteudo($aba, $mysqli, $cd_loja, $nm_loja, $dados_loja, $mens
     }
 }
 
-// ---------------------------------------------------------
-// 5.1. FUNÇÃO: carregar_conteudo_dashboard (CORRIGIDA)
-// ---------------------------------------------------------
+
+// FUNÇÃO: carregar_conteudo_dashboard
+
 
 /**
  * Busca e exibe as métricas e pedidos recentes (Dashboard).
@@ -125,14 +123,14 @@ function carregar_conteudo_dashboard($mysqli, $cd_loja) {
     $pedidos_pendentes = 0;
     $pedidos_recentes = [];
 
-    // Array de Status para o Dropdown (OPÇÕES SOLICITADAS: sem 'Aguardando Pagamento' e 'Cancelado')
+    // Array de Status para o Markdown
     $opcoes_dashboard = [
         'Processando' => 'Em Preparação (Sendo Feito)',
         'Em Entrega' => 'Em Entrega (Pendente)',
         'Entregue' => 'Concluído (Entregue)',
     ];
 
-    // Lógica para Contagens e Soma: Faturamento soma 'Entregue'. Pendentes são Processando/Aguardando/Em Entrega.
+    // Soma do faturamento quando o pedido é finalizado 
     $sql_metrics = "
         SELECT 
             COUNT(cd_pedido) AS total_pedidos,
@@ -153,7 +151,7 @@ function carregar_conteudo_dashboard($mysqli, $cd_loja) {
         $stmt_metrics->close();
     }
 
-    // Pedidos Recentes: Filtra pedidos Concluídos ('Entregue') e Cancelados (para que o lojista só veja o que precisa de ação)
+    // Pedidos Recentes, filtra pedidos Concluídos e Cancelados para o lojista poder gerenciar melhor sua atenção
     $sql_recentes = "
         SELECT 
             p.cd_pedido, 
@@ -180,12 +178,13 @@ function carregar_conteudo_dashboard($mysqli, $cd_loja) {
 
     $html = "<div class='dashboard-content'>";
     
-    // Exibe mensagens de sessão se houver
+
     if (!empty($mensagem_sessao)) {
         $html .= $mensagem_sessao;
     }
     
     // CARDS DE MÉTRICAS 
+
     $html .= "
         <p class='dash-subtitle'>Visão geral rápida das suas vendas.</p>
         <section class='dashboard-grid'>
@@ -209,7 +208,8 @@ function carregar_conteudo_dashboard($mysqli, $cd_loja) {
         </section>
     ";
 
-    // TABELA DE PEDIDOS RECENTES
+    // tabela de pedidos recentes
+
     $html .= "
         <h3>Pedidos Recentes (Máximo 5 - Pedidos em Andamento)</h3>
         <div class='table-responsive scroll-fade-up' data-delay='0.4'>
@@ -281,9 +281,7 @@ function carregar_conteudo_dashboard($mysqli, $cd_loja) {
     return $html;
 }
 
-// ---------------------------------------------------------
-// 5.2. FUNÇÃO: carregar_conteudo_pedidos (CORRIGIDA)
-// ---------------------------------------------------------
+// FUNÇÃO: carregar_conteudo_pedidos (CORRIGIDA)
 
 /**
  * Exibe a aba de Pedidos (PENDENTES) com Dropdown e Botões de Ação.
@@ -291,14 +289,14 @@ function carregar_conteudo_dashboard($mysqli, $cd_loja) {
 function carregar_conteudo_pedidos($mysqli, $cd_loja) {
     global $mensagem_sessao;
     
-    // Array de Status para o Dropdown (OPÇÕES SOLICITADAS)
+    // Array de Status para o Dropdown 
     $opcoes_pedidos = [
         'Processando' => 'Em Preparação (Sendo Feito)',
         'Em Entrega' => 'Em Entrega (Pendente)',
         'Entregue' => 'Concluído (Entregue)',
     ];
 
-    // Busca pedidos pendentes (não concluídos e não cancelados)
+    // Busca pedidos pendentes 
     $sql = "
         SELECT 
             p.cd_pedido, 
@@ -366,7 +364,7 @@ function carregar_conteudo_pedidos($mysqli, $cd_loja) {
                             <select id='status_{$cd_pedido}' name='nova_status' class='select-status'>
             ";
             
-            // Popula o Dropdown (Apenas Processando, Em Entrega, Entregue)
+            // Popula o Dropdown 
             foreach ($opcoes_pedidos as $valor => $descricao) {
                 $selected = ($valor == $status_atual) ? 'selected' : '';
                 
@@ -399,9 +397,7 @@ function carregar_conteudo_pedidos($mysqli, $cd_loja) {
     return $html;
 }
 
-// ---------------------------------------------------------
-// 5.3. FUNÇÃO: carregar_conteudo_produtos
-// ---------------------------------------------------------
+// FUNÇÃO: carregar_conteudo_produtos
 
 /**
  * Exibe a aba de Gerenciamento de Produtos.
@@ -457,7 +453,7 @@ function carregar_conteudo_produtos($mysqli, $cd_loja) {
             $qt_estoque = htmlspecialchars($produto['qt_estoque']);
             $cd_produto = $produto['cd_produto'];
             
-            // Adiciona classe de alerta se o estoque for baixo (ex: < 10)
+            // Classe para adiconar um alerta se o estoque estiver baixo (abaixo de 10)
             $estoque_class = ($qt_estoque < 10 && $qt_estoque > 0) ? 'estoque-baixo' : (($qt_estoque == 0) ? 'estoque-zero' : '');
 
             $html .= "
@@ -484,9 +480,9 @@ function carregar_conteudo_produtos($mysqli, $cd_loja) {
     return $html;
 }
 
-// ---------------------------------------------------------
-// 5.4. FUNÇÃO: carregar_conteudo_configuracoes
-// ---------------------------------------------------------
+
+// FUNÇÃO: carregar_conteudo_configuracoes
+
 
 /**
  * Exibe o formulário de Configurações da Loja.
@@ -550,12 +546,12 @@ function carregar_conteudo_configuracoes($nm_loja, $dados_loja, $mensagem_config
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel da Loja - <?php echo $nm_loja; ?></title>
     <style>
-        /* Variáveis de Cores (Paleta para tema claro com toque de marrom) */
+
         :root {
-            --cor-principal: #FFD700; /* Dourado */
-            --cor-secundaria: #F0E68C; /* Caqui Claro */
-            --cor-marrom-acao: #964B00; /* Marrom para ações/links */
-            --cor-marrom-escuro: #4B382D; /* Marrom Escuro para textos */
+            --cor-principal: #FFD700; 
+            --cor-secundaria: #F0E68C; 
+            --cor-marrom-acao: #964B00; 
+            --cor-marrom-escuro: #4B382D; 
             --cor-fundo-claro: #fff6e9ff;
             --cor-borda: #DDD;
             --cor-sucesso: #28a745;
@@ -711,9 +707,9 @@ function carregar_conteudo_configuracoes($nm_loja, $dados_loja, $mensagem_config
             background-color: var(--cor-marrom-escuro);
         }
 
-        /* ====================================
+        /* 
            ESTILOS DO DASHBOARD
-           ==================================== */
+        */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -853,9 +849,9 @@ function carregar_conteudo_configuracoes($nm_loja, $dados_loja, $mensagem_config
             color: white;
         }
         
-        /* ====================================
+        /* 
            ESTILOS DE PEDIDOS
-           ==================================== */
+         */
         .pedido-card {
             background-color: white;
             padding: 15px 20px;
@@ -989,9 +985,9 @@ function carregar_conteudo_configuracoes($nm_loja, $dados_loja, $mensagem_config
             vertical-align: middle;
         }
         
-        /* ====================================
+        /*
            ESTILOS DE CONFIGURAÇÕES
-           ==================================== */
+        */
         .config-form {
             background-color: white;
             padding: 25px;
@@ -1065,9 +1061,9 @@ function carregar_conteudo_configuracoes($nm_loja, $dados_loja, $mensagem_config
             border-radius: 4px;
         }
 
-        /* ====================================
+        /* 
            ANIMAÇÕES DE FADE-IN (SCROLL)
-           ==================================== */
+         */
         .scroll-fade-up {
             opacity: 0;
             transform: translateY(20px);
@@ -1079,27 +1075,24 @@ function carregar_conteudo_configuracoes($nm_loja, $dados_loja, $mensagem_config
             transform: translateY(0);
         }
 
-        /* ========================================= */
-/* ESTILOS MODERNOS E RESPONSIVOS PARA BOTÕES EXTRA */
-/* ========================================= */
 
 .sidebar-actions-rodape {
     /* Garante que os botões fiquem fixos na base da sidebar */
     margin-top: auto; 
     padding: 15px;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
-    
+
     /* Configurações para Centralização e Responsividade */
     display: flex; 
     flex-direction: column;
-    align-items: center; /* Centraliza os itens horizontalmente (o quebra-cabeça principal) */
+    align-items: center; 
     gap: 10px;
 }
 
 .btn-sidebar {
     /* Define a largura máxima para responsividade em telas grandes */
     max-width: 250px; 
-    width: 100%; /* Garante que o botão ocupe 100% da max-width definida */
+    width: 100%; 
     padding: 10px 15px;
     border: none;
     border-radius: 8px;
@@ -1116,7 +1109,7 @@ function carregar_conteudo_configuracoes($nm_loja, $dados_loja, $mensagem_config
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* --- Botão VOLTAR (Mantenha as cores e hover) --- */
+/* --- Botão voltar --- */
 .btn-voltar {
     background-color: var(--cor-marrom-acao);
     color: white;
@@ -1128,7 +1121,7 @@ function carregar_conteudo_configuracoes($nm_loja, $dados_loja, $mensagem_config
     background-color: #A0522D; 
 }
 
-/* --- Botão LOGOUT (Mantenha as cores e hover) --- */
+/* --- Botão logout --- */
 .btn-logout {
     background-color: #dc3545; 
     color: white;
@@ -1191,7 +1184,7 @@ function carregar_conteudo_configuracoes($nm_loja, $dados_loja, $mensagem_config
             ?></h2>
             
             <?php
-            // 4. CARREGAMENTO DO CONTEÚDO (CHAMADA DA FUNÇÃO)
+            // Carregar o conteudo
             echo carregar_conteudo($aba_ativa, $mysqli, $cd_loja, $nm_loja, $dados_loja, $mensagem_config, $mensagem_sessao);
             ?>
             
@@ -1202,7 +1195,7 @@ function carregar_conteudo_configuracoes($nm_loja, $dados_loja, $mensagem_config
         document.addEventListener('DOMContentLoaded', function() {
             
             /**
-             * Lógica de animação Fade-In ao rolar a página (Intersection Observer API)
+             * animação Fade-In ao rolar a página utilizando o IntersectionObserver
              */
             const elementsToObserve = document.querySelectorAll('.scroll-fade-up');
             
@@ -1212,7 +1205,7 @@ function carregar_conteudo_configuracoes($nm_loja, $dados_loja, $mensagem_config
                         const target = entry.target;
                         target.classList.add('is-visible');
                         
-                        // Lógica de Delay Escalonado (Para cards de métrica)
+                        // Lógica de Delay Escalonado 
                         const delay = target.getAttribute('data-delay');
                         if (delay) {
                             // Adiciona o delay e remove o atributo para evitar re-aplicação
@@ -1236,11 +1229,11 @@ function carregar_conteudo_configuracoes($nm_loja, $dados_loja, $mensagem_config
 
 
             /**
-             * Função JavaScript para confirmar a exclusão de um produto.
+             *  JavaScript para confirmar a exclusão de um produto.
              */
             window.confirmDelete = function(idProduto) {
                 if (confirm("Tem certeza que deseja EXCLUIR permanentemente este produto? Esta ação não pode ser desfeita.")) {
-                    // O arquivo delete_produto.php precisa ser criado com a lógica de exclusão
+                    
                     window.location.href = 'delete_produto.php?id=' + idProduto;
                 }
             }

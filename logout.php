@@ -13,10 +13,10 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-// Finalmente, destrói a sessão
+// Finalmente, Destroi a sessão tanto de loja quanto para cliente
 session_destroy();
 
-// Redireciona para a página principal (agora o index.php saberá que ele está deslogado)
+// Redireciona para a página principal 
 header("Location: index.php");
 exit();
 ?>

@@ -11,10 +11,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nr_telefone= $mysqli->real_escape_string($_POST['telefone']);
     $ds_senha_crua = $_POST['senha'];
 
-    //  Hashing da Senha (Obrigatório por segurança!)
+    //  Hashing da Senha (Criptografia para a senha)
     $ds_senha_hash = password_hash($ds_senha_crua, PASSWORD_DEFAULT);
 
-    //  Prepared Statement para inserção segura
+    //  Prepared Statement para inserção segura (recurso do banco de dados que permite compilar uma consulta SQl para previnir SQL Injection (Os pontos de interrogação))
     $sql = "INSERT INTO cadastro_cliente (nm_cliente, cd_cpf, ds_email, nr_telefone, ds_senha) VALUES (?, ?, ?, ?, ?)";
 
     $stmt = $mysqli->prepare($sql);
@@ -43,12 +43,12 @@ $mysqli->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Cliente - CandyPlace</title>
     <style>
-        /* Paleta de Cores (Consistente com as demais páginas) */
+
         :root {
             --cor-principal-fundo: #F8EFE4; 
             --cor-container-fundo: #FFFFFF;
-            --cor-marrom-acao: #A0522D;     /* Ação principal/Botão */
-            --cor-marrom-escuro: #6B4423;   /* Textos/Títulos */
+            --cor-marrom-acao: #A0522D;
+            --cor-marrom-escuro: #6B4423;   
             --cor-borda: #E0D4C5;
             --cor-verde-sucesso: #28A745;
             --cor-vermelho-erro: #DC3545;
@@ -61,7 +61,7 @@ $mysqli->close();
             background-color: var(--cor-principal-fundo);
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Alinha no topo, já que o formulário é mais longo */
+            align-items: flex-start; 
             min-height: 100vh;
         }
 
@@ -247,9 +247,11 @@ $mysqli->close();
     </div>
     
     <script>
-        /**
-         * Função JavaScript para alternar a visibilidade da senha.
+
+        /*
+         Função JavaScript para alternar a visibilidade da senha.
          */
+
         function myFunction() {
             var x = document.getElementById("senha");
             if (x.type === "password") {

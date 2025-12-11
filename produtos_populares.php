@@ -2,17 +2,17 @@
 include 'db_connect.php'; // Inclui a conexão com o banco de dados
 session_start(); // Inicia a sessão
 
-// LÓGICA DE SESSÃO (REUTILIZADA DO index.php)
+
 $is_logged_in = isset($_SESSION['logado']) && $_SESSION['logado'] === true;
 $user_type = $is_logged_in ? ($_SESSION['tipo_usuario'] ?? null) : null;
 $user_name = $is_logged_in ? (htmlspecialchars($_SESSION['nm_usuario'] ?? 'Usuário')) : '';
 
-// =========================================================
-// BUSCA TODOS OS PRODUTOS NO BANCO DE DADOS (SEM LIMITE)
-// =========================================================
-$produtos = []; // Array para armazenar TODOS os produtos
 
-// SQL para buscar TODOS os produtos
+// busca todos os produtos no banco de dados
+
+$produtos = []; // Array para armazenar os produtos
+
+// SQL para buscar os produtos
 $sql = "
     SELECT 
         p.cd_produto, 
@@ -37,7 +37,7 @@ while ($produto = $resultado->fetch_assoc()) {
 }
 
 $stmt->close();
-$mysqli->close(); // Fecha a conexão
+$mysqli->close(); 
 ?>
 
 <!DOCTYPE html>

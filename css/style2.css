@@ -1,6 +1,6 @@
-/* ========================================================= */
-/* 1. VARIÁVEIS DE COR & ESTILOS GLOBAIS */
-/* ========================================================= */
+
+/* VARIÁVEIS DE COR & ESTILOS GLOBAIS */
+
 :root {
     --cor-fundo: #FAF0E6; 	   /* Bege Claro */
     --cor-secao: #F5E4D0; 	   /* Creme Rosado */
@@ -45,10 +45,10 @@ h1, h2, h3 {
     position: relative;
 }
 
-/* ========================================================= */
-/* 2. ANIMAÇÕES DE SCROLL (Estado Inicial) */
-/* O JS adicionará a classe 'is-visible' para aplicar o efeito final */
-/* ========================================================= */
+
+/* ANIMAÇÕES DE SCROLL (Estado Inicial) */
+/* O JS adicionará a classe 'is-visible' para aplicar o efeito */
+
 .slide-up-element, 
 .scroll-fade-up, 
 .scroll-fade-left, 
@@ -69,15 +69,15 @@ h1, h2, h3 {
     transform: translateX(50px);
 }
 
-/* Estado Final (Adicionado pelo JS) */
+
 .is-visible {
     opacity: 1;
     transform: translate(0, 0); /* Reseta todas as transformações de movimento */
 }
 
-/* ========================================================= */
-/* 3. BOTÕES (CTAs) */
-/* ========================================================= */
+
+/* BOTÕES (CTAs) */
+
 .btn-primary, .btn-cta-cliente, .btn-cta-loja {
     display: inline-block;
     padding: 18px 40px;
@@ -89,11 +89,11 @@ h1, h2, h3 {
     text-transform: uppercase;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Easing Bounce */
-    border: none; /* Adicionado por segurança se não houver um border-box default */
-    cursor: pointer; /* Adicionado para acessibilidade visual */
+    border: none; 
+    cursor: pointer; 
 }
 
-/* Microinteraction/Hover Suave (CORRIGIDO: Aplicado às classes de botão) */
+/* Microinteraction/Hover Suave  */
 .btn-microinteraction:hover,
 .btn-primary:hover, 
 .btn-cta-cliente:hover, 
@@ -109,13 +109,13 @@ h1, h2, h3 {
     border: 3px solid var(--cor-acao-secundaria);
 }
 
-/* ========================================================= */
-/* 4. HERO SECTION */
-/* ========================================================= */
+
+/* HERO SECTION */
+
 .hero-section {
     background-color: var(--cor-fundo);
     text-align: center;
-    /* CORRIGIDO: Padding superior ajustado para compensar a navbar fixa */
+
     padding: 100px 0; 
     min-height: 80vh;
     display: flex;
@@ -124,19 +124,19 @@ h1, h2, h3 {
     position: relative;
     overflow: hidden;
 }
-/* Garante que o conteúdo não fique escondido sob a navbar fixa (padding final) */
+
 .hero-section-content {
     padding-top: 100px;
 }
 
-/* CORRIGIDO: Estilo do Logo consolidado (para usar <img> e esconder o texto H1) */
+
 .logo {
-    /* Esconde o texto do H1 para acessibilidade/SEO da imagem */
+
     text-indent: -9999px; 
     overflow: hidden;
     padding: 0;
     line-height: 0;
-    /* CORRIGIDO: Centraliza o bloco e define a margem inferior de forma clara */
+
     margin: 0 auto 30px auto; 
     display: block;
 }
@@ -144,7 +144,7 @@ h1, h2, h3 {
 .logo img {
     display: block;
     width: 100%; 
-    max-width: 450px; /* Aumentado de 300px para 450px para telas maiores */
+    max-width: 450px; 
     height: auto;
     margin: 0 auto; /* Centraliza a imagem no container */
     transition: transform 0.8s ease-out, opacity 0.8s ease-out;
@@ -185,7 +185,7 @@ h1, h2, h3 {
     100% { transform: translateY(-3px); }
 }
 
-/* Visual Candy no Fundo (Efeito Brilho Doce) */
+/* Visual Candy no Fundo */
 .candy-visual {
     position: absolute;
     top: 0;
@@ -198,9 +198,9 @@ h1, h2, h3 {
     z-index: -1;
 }
 
-/* ========================================================= */
-/* 5. FEEDBACK SECTION */
-/* ========================================================= */
+
+/* FEEDBACK SECTION */
+
 .section-feedback {
     background-color: var(--cor-secao);
     padding: 80px 0;
@@ -249,9 +249,9 @@ h1, h2, h3 {
     margin-bottom: 15px;
 }
 
-/* ========================================================= */
-/* 6. BENEFÍCIOS SECTION */
-/* ========================================================= */
+
+/* 7. BENEFÍCIOS SECTION */
+
 .section-benefits {
     padding: 80px 0;
     background-color: var(--cor-fundo);
@@ -292,9 +292,9 @@ h1, h2, h3 {
     content: attr(data-icon);
 }
 
-/* ========================================================= */
+
 /* 7. STORYTELLING SECTION */
-/* ========================================================= */
+
 .section-storytelling {
     padding: 100px 0;
     background: url('https://via.placeholder.com/1500x700/A15A45/F5E4D0?text=Fundo+História+Doce') no-repeat center center/cover;
@@ -344,9 +344,9 @@ h1, h2, h3 {
     border-top: 2px solid var(--cor-destaque-clara);
 }
 
-/* ========================================================= */
-/* 8. FINAL CTA SECTION */
-/* ========================================================= */
+
+/* FINAL CTA SECTION */
+
 .section-final-cta {
     background-color: var(--cor-secao);
     padding: 80px 0;
@@ -366,7 +366,7 @@ h1, h2, h3 {
     box-shadow: var(--sombra-card);
     flex: 1;
     max-width: 450px;
-    transition: transform 0.4s, box-shadow 0.4s, border-color 0.4s; /* Adicionado border-color */
+    transition: transform 0.4s, box-shadow 0.4s, border-color 0.4s; 
     border: 2px solid transparent;
 }
 
@@ -401,9 +401,9 @@ h1, h2, h3 {
     background-color: var(--cor-acao-secundaria);
 }
 
-/* ========================================================= */
-/* 9. NAVBAR FIXA (COM CORREÇÃO DE PRECEDÊNCIA DO CTA) */
-/* ========================================================= */
+
+/* NAVBAR FIXA (COM CORREÇÃO DE PRECEDÊNCIA DO CTA) */
+
 #main-navbar {
     position: fixed; 
     top: 0;
@@ -425,7 +425,7 @@ h1, h2, h3 {
     margin: 0 auto;
 }
 
-/* Título (Mantenha o estilo inalterado) */
+/* Título */
 .nav-title {
     font-family: 'Arial Black', sans-serif; 
     font-size: 2.8em;
@@ -462,7 +462,7 @@ h1, h2, h3 {
     font-size: 1em;
     padding: 6px 15px;
     border-radius: 20px;
-    /* Remove o background aqui para que todos sejam transparentes por padrão */
+
     background-color: transparent; 
     transition: background-color 0.3s, color 0.3s, transform 0.2s;
 }
@@ -482,9 +482,9 @@ h1, h2, h3 {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Estilo específico do CTA (Apenas padding maior, sem cor de fundo) */
+/* Estilo específico do CTA  */
 .nav-item.nav-cta {
-    /* O CTA agora só define o padding/tamanho, a cor de fundo é herdada como transparente */
+
     padding: 8px 18px; 
     border-radius: 25px;
 }
@@ -497,9 +497,9 @@ h1, h2, h3 {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* ========================================================= */
-/* 10. RESPONSIVIDADE - AJUSTES NA NAVBAR */
-/* ========================================================= */
+
+/* RESPONSIVIDADE - AJUSTES NA NAVBAR */
+
 
 /* Em telas muito pequenas (Mobile) */
 @media (max-width: 600px) {
@@ -524,9 +524,9 @@ h1, h2, h3 {
     }
 }
 
-/* ========================================================= */
-/* 10. RESPONSIVIDADE */
-/* ========================================================= */
+
+/* RESPONSIVIDADE */
+
 @media (max-width: 900px) {
     .feedback-grid, .benefits-grid, .cta-cards-grid {
         flex-direction: column;
@@ -554,7 +554,7 @@ h1, h2, h3 {
 /* Responsividade Básica da Navbar */
 @media (max-width: 768px) {
     .nav-links {
-        display: none; /* Em telas pequenas, você pode esconder ou usar um botão "hamburguer" */
+        display: none; 
     }
     .nav-content {
         justify-content: center; /* Centraliza o logo se os links sumirem */

@@ -2,7 +2,7 @@
 include 'db_connect.php';
 session_start();
 
-// 1. VERIFICAÇÃO DE LOGIN
+//  VERIFICAÇÃO DE LOGIN
 if (!isset($_SESSION['logado']) || $_SESSION['tipo_usuario'] !== 'cliente') {
     header("Location: login_cliente.php");
     exit();
@@ -11,10 +11,10 @@ if (!isset($_SESSION['logado']) || $_SESSION['tipo_usuario'] !== 'cliente') {
 $cd_cliente = $_SESSION['cd_usuario'];
 $mensagem = "";
 
-// 2. VERIFICA OU CRIA O CARRINHO ATIVO (REGISTRO NA TABELA PEDIDO)
+//  VERIFICA OU CRIA O CARRINHO ATIVO (REGISTRO NA TABELA PEDIDO)
 if (!isset($_SESSION['cd_pedido_ativo'])) {
     
-    // Procura primeiro se existe um carrinho pendente que foi salvo no banco (recuperação do logout)
+    // Procura primeiro se existe um carrinho pendente que foi salvo no banco
     $sql_carrinho_ativo = "SELECT cd_pedido FROM pedido WHERE cd_cliente = ? AND ds_status_pedido = 'Carrinho' LIMIT 1";
     $stmt_carrinho = $mysqli->prepare($sql_carrinho_ativo);
     $stmt_carrinho->bind_param("i", $cd_cliente);
@@ -22,10 +22,10 @@ if (!isset($_SESSION['cd_pedido_ativo'])) {
     $resultado_carrinho = $stmt_carrinho->get_result();
     
     if ($resultado_carrinho->num_rows === 1) {
-        // Encontrou um carrinho salvo, carrega o ID
+        // se encontrou um carrinho salvo, carrega o ID
         $pedido_ativo = $resultado_carrinho->fetch_assoc();
         $_SESSION['cd_pedido_ativo'] = $pedido_ativo['cd_pedido'];
-        // MENSAGEM ADAPTADA AO CSS
+        
         $mensagem .= "<p class='msg-alerta'>🔄 Seu carrinho anterior foi recuperado com sucesso.</p>";
     } else {
         // Se não houver carrinho na sessão nem no banco, cria um novo
@@ -38,7 +38,6 @@ if (!isset($_SESSION['cd_pedido_ativo'])) {
             $_SESSION['cd_pedido_ativo'] = $mysqli->insert_id;
         } else {
             // Erro fatal ao criar pedido
-            // MENSAGEM ADAPTADA AO CSS
             $mensagem = "<p class='msg-erro'>❌ Erro fatal ao iniciar o carrinho: " . $stmt_cria->error . "</p>";
         }
         if (isset($stmt_cria)) {
@@ -52,9 +51,8 @@ if (!isset($_SESSION['cd_pedido_ativo'])) {
 
 $cd_pedido = $_SESSION['cd_pedido_ativo'] ?? 0; // Recupera o ID do pedido ativo
 
-// =========================================================
-// 3. POST HANDLING: REMOÇÃO E ATUALIZAÇÃO DE ITENS
-// =========================================================
+// REMOÇÃO E ATUALIZAÇÃO DE ITENS
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && $cd_pedido > 0) {
     
     $cd_produto = isset($_POST['cd_produto']) ? intval($_POST['cd_produto']) : 0;
@@ -73,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $cd_pedido > 0) {
             $qt_atual = $resultado->num_rows > 0 ? $resultado->fetch_assoc()['qt_produto'] : 0;
             $stmt_qt_atual->close();
 
-            // Ação 1: Deletar o item completamente (Botão X)
+            // Deletar o item completamente (Botão X)
             if ($action === 'delete_item') {
                 $sql_delete = "DELETE FROM itens WHERE cd_pedido = ? AND cd_produto = ?";
                 $stmt_delete = $mysqli->prepare($sql_delete);
@@ -82,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $cd_pedido > 0) {
                 $mensagem_redirect = "Item removido completamente do carrinho.";
                 $stmt_delete->close();
 
-            // Ação 2: Remover apenas uma unidade (Botão -)
+            // Remover apenas uma unidade (Botão -)
             } elseif ($action === 'remove_one') {
                 if ($qt_atual > 1) {
                     $qt_nova = $qt_atual - 1;
@@ -114,17 +112,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $cd_pedido > 0) {
 }
 // FIM DO POST HANDLING
 
-// 4. MENSAGENS DE STATUS (GET)
+//  MENSAGENS DE STATUS (GET)
 if (isset($_GET['status'])) {
     // MENSAGEM ADAPTADA AO CSS
     $mensagem .= "<p class='msg-sucesso'>✅ " . htmlspecialchars($_GET['status']) . "</p>";
 }
 if (isset($_GET['erro'])) {
-    // MENSAGEM ADAPTADA AO CSS
+
     $mensagem .= "<p class='msg-erro'>❌ " . htmlspecialchars($_GET['erro']) . "</p>";
 }
 
-// 5. BUSCA DETALHADA DOS ITENS DO CARRINHO PARA EXIBIÇÃO
+//  BUSCA DETALHADA DOS ITENS DO CARRINHO PARA EXIBIÇÃO
 $itens_carrinho = [];
 $subtotal_carrinho = 0.00;
 
@@ -175,7 +173,7 @@ if (!empty($itens_carrinho)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Carrinho - CandyPlace</title>
     <style>
-        /* Paleta de Cores baseada no seu site: */
+        
         :root {
             --cor-principal-fundo: #F8EFE4; 
             --cor-container-fundo: #FFFFFF;
@@ -240,9 +238,7 @@ if (!empty($itens_carrinho)) {
             margin-bottom: 15px;
         }
 
-        /* ========================================================= */
         /* ESTILOS DA TABELA DO CARRINHO */
-        /* ========================================================= */
 
         .table-responsive {
             overflow-x: auto; 
@@ -344,9 +340,8 @@ if (!empty($itens_carrinho)) {
             opacity: 0.8;
         }
 
-        /* ========================================================= */
         /* AÇÕES FINAIS (Botões abaixo da tabela) */
-        /* ========================================================= */
+
         .carrinho-actions {
             display: flex;
             justify-content: space-between;
@@ -397,9 +392,8 @@ if (!empty($itens_carrinho)) {
             text-decoration: underline;
         }
 
-        /* ========================================================= */
         /* ESTILOS DA MODAL DE CONFIRMAÇÃO (NOVO) */
-        /* ========================================================= */
+
         .custom-modal {
             position: fixed;
             top: 0;
@@ -415,13 +409,13 @@ if (!empty($itens_carrinho)) {
             transition: opacity 0.3s ease;
         }
         .custom-modal.is-visible {
-            display: flex; /* Exibir com flex */
-            opacity: 1; /* Transição de opacidade */
+            display: flex; 
+            opacity: 1; 
         }
         .modal-content {
             background-color: white;
             padding: 30px;
-            border-radius: 8px; /* Usei 8px por ser o padrão de border-radius que você já usava */
+            border-radius: 8px; 
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
             width: 90%;
             max-width: 400px;
@@ -460,7 +454,7 @@ if (!empty($itens_carrinho)) {
             background-color: #ccc;
         }
         .confirm-btn {
-            background-color: var(--cor-vermelho-erro); /* Usar vermelho para indicar DELETAR */
+            background-color: var(--cor-vermelho-erro); 
             color: white;
         }
         .confirm-btn:hover {
@@ -593,7 +587,7 @@ if (!empty($itens_carrinho)) {
             
             let formToSubmit = null; // Armazena a referência do formulário que será enviado
 
-            // 1. ABRIR MODAL
+            //  ABRIR MODAL
             document.querySelectorAll('.js-remove-item-trigger').forEach(button => {
                 button.addEventListener('click', function() {
                     formToSubmit = this.closest('form.js-delete-form'); // Captura o formulário pai
@@ -610,7 +604,7 @@ if (!empty($itens_carrinho)) {
                 });
             });
 
-            // 2. CONFIRMAR (Submeter o Formulário)
+            //  CONFIRMAR (Submeter o Formulário)
             confirmBtn.addEventListener('click', () => {
                 if (formToSubmit) {
                     formToSubmit.submit(); // Envia o formulário POST
@@ -618,7 +612,7 @@ if (!empty($itens_carrinho)) {
                 closeModal();
             });
 
-            // 3. CANCELAR / FECHAR
+            // CANCELAR / FECHAR
             const closeModal = () => {
                 modal.classList.remove('is-visible');
                 modal.setAttribute('aria-hidden', 'true');

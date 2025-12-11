@@ -2,14 +2,14 @@
 include 'db_connect.php'; 
 session_start(); 
 
-// LÓGICA DE SESSÃO 
+// lógica de sessão
 $is_logged_in = isset($_SESSION['logado']) && $_SESSION['logado'] === true;
 $user_type = $is_logged_in ? ($_SESSION['tipo_usuario'] ?? null) : null;
 $user_name = $is_logged_in ? (htmlspecialchars($_SESSION['nm_usuario'] ?? 'Usuário')) : '';
 
-// =========================================================
-// BUSCA TODAS AS LOJAS NO BANCO DE DADOS (SEM LIMITE)
-// =========================================================
+
+// busca as lojas no banco de dados
+
 $lojas = []; 
 
 $sql_lojas = "

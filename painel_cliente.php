@@ -13,9 +13,9 @@ $id_cliente = $_SESSION['cd_usuario'];
 $mensagem_perfil = "";
 $mensagem_endereco = "";
 
-// =========================================================
-// A. POST HANDLING: ATUALIZAÇÃO DO PERFIL (Nome, Email, Telefone)
-// =========================================================
+
+// POST HANDLING: ATUALIZAÇÃO DO PERFIL (Nome, Email, Telefone)
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] === 'update_profile') {
     $nm_cliente = $mysqli->real_escape_string($_POST['nome']);
     $ds_email   = $mysqli->real_escape_string($_POST['email']);
@@ -39,9 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
     $stmt->close();
 }
 
-// =========================================================
+
 // B. POST HANDLING: CADASTRO/EDIÇÃO DE ENDEREÇO
-// =========================================================
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] === 'save_address') {
     // Coleta e sanitiza os dados do endereço (ds_estado removido)
     $ds_endereco = $mysqli->real_escape_string($_POST['ds_endereco']); 
@@ -59,14 +59,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
     if ($result_check->num_rows > 0) {
         // UPDATE 
         $endereco_id = $result_check->fetch_assoc()['cd_endereco'];
-        // Ajustado: removido ds_estado do UPDATE
+
         $sql_addr = "UPDATE endereco_cliente SET ds_endereco=?, nm_bairro=?, nm_cidade=?, cd_cep=? WHERE cd_endereco=?";
         $stmt_addr = $mysqli->prepare($sql_addr);
         $stmt_addr->bind_param("ssssi", $ds_endereco, $nm_bairro, $nm_cidade, $cd_cep, $endereco_id);
         $acao = "atualizado";
     } else {
         // INSERT 
-        // Ajustado: removido ds_estado do INSERT
         $sql_addr = "INSERT INTO endereco_cliente (cd_cliente, ds_endereco, nm_bairro, nm_cidade, cd_cep) VALUES (?, ?, ?, ?, ?)";
         $stmt_addr = $mysqli->prepare($sql_addr);
         $stmt_addr->bind_param("issss", $id_cliente, $ds_endereco, $nm_bairro, $nm_cidade, $cd_cep);
@@ -82,11 +81,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
     $stmt_addr->close();
 }
 
-// =========================================================
-// C. FETCH DATA (Profile, Address, Cart)
-// =========================================================
 
-// 1. Fetch current profile data
+// C. FETCH DATA (Profile, Address, Cart)
+
+
+// Fetch current profile data
 $sql_profile = "SELECT nm_cliente, ds_email, nr_telefone FROM cadastro_cliente WHERE cd_cliente = ?";
 $stmt_profile = $mysqli->prepare($sql_profile);
 $stmt_profile->bind_param("i", $id_cliente);
@@ -94,7 +93,7 @@ $stmt_profile->execute();
 $profile_data = $stmt_profile->get_result()->fetch_assoc();
 $stmt_profile->close();
 
-// 2. Fetch current address data (CORRIGIDO: Removido ds_estado)
+// Fetch current address data 
 $sql_address = "SELECT cd_endereco, ds_endereco, nm_bairro, nm_cidade, cd_cep FROM endereco_cliente WHERE cd_cliente = ? LIMIT 1";
 $stmt_address = $mysqli->prepare($sql_address);
 $stmt_address->bind_param("i", $id_cliente);
@@ -103,7 +102,7 @@ $address_data = $stmt_address->get_result()->fetch_assoc();
 $stmt_address->close();
 $address_exists = $address_data !== null;
 
-// 3. Fetch Cart Summary Data
+// Fetch Cart Summary Data
 $subtotal_carrinho = 0.00;
 $cd_pedido = $_SESSION['cd_pedido_ativo'] ?? 0;
 $total_itens_carrinho = 0;
@@ -132,17 +131,16 @@ $mysqli->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Cliente - CandyPlace</title>
     <style>
-        /* Paleta de Cores (Consistente com finalizar_pedido.php): */
         :root {
             --cor-principal-fundo: #F8EFE4; 
             --cor-container-fundo: #FFFFFF;
-            --cor-marrom-acao: #A0522D;    
-            --cor-marrom-escuro: #6B4423;  
+            --cor-marrom-acao: #A0522D; 
+            --cor-marrom-escuro: #6B4423; 
             --cor-borda: #E0D4C5;
             --cor-verde-sucesso: #28A745;
-            --cor-azul-acao: #007bff; /* Usado para botões de perfil */
+            --cor-azul-acao: #007bff; 
             --cor-vermelho-erro: #DC3545;
-            --cor-cart-fundo: #FFF8E1; /* Amarelo suave */
+            --cor-cart-fundo: #FFF8E1; 
         }
 
         body { 
@@ -179,7 +177,7 @@ $mysqli->close();
         }
         
         .card-section {
-            flex: 1 1 300px; /* Base size for cards */
+            flex: 1 1 300px;
             border: 1px solid var(--cor-borda);
             border-radius: 8px;
             padding: 20px;
@@ -229,9 +227,9 @@ $mysqli->close();
         }
 
 
-        /* ========================================================= */
+
         /* FORMS E INPUTS */
-        /* ========================================================= */
+ 
         .form-group { 
             margin-bottom: 15px; 
         }

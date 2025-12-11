@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ds_email = $mysqli->real_escape_string($_POST['email']);
     $ds_senha_crua = $_POST['senha'];
 
-    // 1. Prepared Statement para buscar a loja pelo email
+    // Prepared Statement para buscar a loja pelo email
     $sql = "SELECT cd_loja, nm_loja, ds_senha, status_loja FROM cadastro_loja WHERE ds_email = ?";
     
     $stmt = $mysqli->prepare($sql);
@@ -20,14 +20,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $loja = $resultado->fetch_assoc();
         $ds_senha_hash = $loja['ds_senha'];
 
-        // 2. Verifica o status da loja
+        // Verifica o status da loja
         if ($loja['status_loja'] !== 'Ativa') {
-            // MENSAGEM ADAPTADA AO CSS
+
             $mensagem = "<p class='msg-aviso'>⚠️ Sua conta está " . $loja['status_loja'] . ". Por favor, entre em contato com o suporte.</p>";
         }
-        // 3. Verifica a Senha (Usa password_verify para comparar o hash)
+        // Verifica a Senha (usando password_verify para comparar o hash)
         else if (password_verify($ds_senha_crua, $ds_senha_hash)) {
-            // Sucesso no Login
+
             $_SESSION['logado'] = true;
             $_SESSION['tipo_usuario'] = 'loja';
             $_SESSION['cd_usuario'] = $loja['cd_loja'];
@@ -37,11 +37,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: painel_loja.php"); 
             exit();
         } else {
-            // MENSAGEM ADAPTADA AO CSS
+
             $mensagem = "<p class='msg-erro'>❌ Senha incorreta.</p>";
         }
     } else {
-        // MENSAGEM ADAPTADA AO CSS
+
         $mensagem = "<p class='msg-erro'>❌ E-mail não encontrado.</p>";
     }
     $stmt->close();
@@ -56,12 +56,12 @@ $mysqli->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login de Loja - CandyPlace</title>
     <style>
-        /* Paleta de Cores (Consistente com as demais páginas) */
+
         :root {
             --cor-principal-fundo: #F8EFE4; 
             --cor-container-fundo: #FFFFFF;
-            --cor-marrom-acao: #A0522D;     /* Ação principal */
-            --cor-marrom-escuro: #6B4423;   /* Textos/Títulos */
+            --cor-marrom-acao: #A0522D;     
+            --cor-marrom-escuro: #6B4423;   
             --cor-borda: #E0D4C5;
             --cor-verde-sucesso: #28A745;
             --cor-vermelho-erro: #DC3545;

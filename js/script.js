@@ -1,6 +1,6 @@
-// =========================================================
+
 // Funções de Utilitário (Debounce)
-// =========================================================
+
 const debounce = (func, delay = 100) => {
     let timeoutId;
     return (...args) => {
@@ -13,16 +13,14 @@ const debounce = (func, delay = 100) => {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // =========================================================
-    // AÇÃO 1: FADE-IN DA PÁGINA COMPLETA
-    // Adiciona a classe body-loaded para iniciar o fade-in do body
-    // =========================================================
+
+    //  FADE-IN DA PÁGINA COMPLETA
     document.body.classList.add('body-loaded');
 
 
-    // =========================================================
-    // 2. Carrossel Principal
-    // =========================================================
+
+    // Carrossel Principal
+
     const carousel = document.getElementById('main-carousel');
     const prevButton = document.querySelector('.prev');
     const nextButton = document.querySelector('.next');
@@ -34,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Calcula e aplica a transformação para mostrar o slide correto
         function updateCarousel() {
-            // Usa o offsetLeft do item, que é mais preciso que clientWidth para alguns browsers/zoom
+            
             const itemWidth = items[0].offsetWidth; 
             requestAnimationFrame(() => {
                 carousel.style.transform = `translateX(${-currentIndex * itemWidth}px)`;
@@ -85,9 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // =========================================================
-    // 3. Animação Fade-in com Intersection Observer (Scroll Reveal)
-    // =========================================================
+
+    // Animação Fade-in com Intersection Observer (Scroll Reveal)
+
     const observerOptions = {
         root: null,
         rootMargin: "0px",
@@ -110,9 +108,9 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
     
-    // =========================================================
-    // 4. Rolagem suave nos links internos
-    // =========================================================
+
+    // Rolagem suave nos links internos
+
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener("click", function(e) {
             e.preventDefault();

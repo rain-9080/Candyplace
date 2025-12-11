@@ -1,11 +1,11 @@
 <?php
-// OBRIGATÓRIO: Inicia ou retoma a sessão para ler as variáveis de login.
-session_start(); 
-include 'db_connect.php'; // 1. INCLUI A CONEXÃO COM O BANCO DE DADOS
 
-// =========================================================
-// 1. LÓGICA DO CARROSSEL: Busca 3 produtos aleatórios com imagem
-// =========================================================
+session_start(); 
+include 'db_connect.php'; 
+
+
+//  Bloco que pega 3 produtos de forma aleatoria
+
 $produtos_destaque = [];
 $sql_destaque = "
     SELECT nm_produto, ds_imagem, ds_categoria 
@@ -22,19 +22,19 @@ if ($mysqli && $resultado_destaque = $mysqli->query($sql_destaque)) {
 }
 
 
-// LÓGICA DE SESSÃO MULTIUSUÁRIO (CLIENTE E LOJA)
+// Bloco para separar usuarios, permitindo separa lojista e usuarios 
 $is_logged_in = isset($_SESSION['logado']) && $_SESSION['logado'] === true;
 $user_type = $is_logged_in ? ($_SESSION['tipo_usuario'] ?? null) : null;
 $user_name = $is_logged_in ? (htmlspecialchars($_SESSION['nm_usuario'] ?? 'Usuário')) : '';
 
-// =========================================================
+
 // 2. BUSCA PRODUTOS NO BANCO DE DADOS (POPULARES: MAX 12 + 1)
-// =========================================================
+
 $produtos = []; // Array para armazenar os produtos
 $limite_produtos = 12; // Limite de exibição na página inicial
-$tem_mais_produtos = false; // Flag para o botão "Ver Mais"
+$tem_mais_produtos = false; 
 
-// SQL para buscar ATÉ 13 produtos (12 para exibir + 1 para checar se há mais)
+
 $sql_produtos = "
     SELECT 
         p.cd_produto, 
@@ -61,7 +61,7 @@ if ($mysqli && $stmt_produtos = $mysqli->prepare($sql_produtos)) {
 
     $stmt_produtos->close();
 
-    // Lógica para limitar a 12 e checar o botão
+    // Limitação para 12 produtos 
     if (count($produtos) > $limite_produtos) {
         $tem_mais_produtos = true;
         // Remove o 13º item, deixando apenas 12 para exibição
@@ -69,7 +69,7 @@ if ($mysqli && $stmt_produtos = $mysqli->prepare($sql_produtos)) {
     }
 }
 
-// FECHANDO A CONEXÃO
+
 if ($mysqli) {
     $mysqli->close(); 
 }
@@ -86,14 +86,7 @@ if ($mysqli) {
 <body>
 
     <header class="header-top">
-        <a href="/" class="logo" aria-label="CandyPlace - Voltar para a página inicial">CandyPlace</a>
-
-        <form class="search-bar-container" role="search" aria-label="Buscar produtos e lojas">
-            <div class="search-bar">
-                <label for="search-input" class="sr-only">Pesquisar</label>
-                <input type="search" id="search-input" placeholder="Pesquisar doces, lojas...">
-                <button type="submit" class="search-btn" aria-label="Buscar">🔍</button>
-            </div>
+        <a href="http://localhost/candyplace/landing_page.php" class="logo" aria-label="CandyPlace - Voltar para a página inicial">CandyPlace</a>
         </form>
 
         <nav class="nav-actions" aria-label="Ações do Usuário e Carrinho">
@@ -134,7 +127,7 @@ if ($mysqli) {
                 <?php if (count($produtos_destaque) > 0): ?>
                     
                     <?php foreach ($produtos_destaque as $i => $produto): 
-                        // Define uma cor de fundo com base no índice
+                        
                         $cores_fundo = ['#ffddd2', '#e4c192', '#a4978e', '#d8a499'];
                         $cor_fundo = $cores_fundo[$i % count($cores_fundo)];
                     ?>
@@ -178,9 +171,9 @@ if ($mysqli) {
                     // Cria um link simples baseado no ID do produto
                     $link_produto = "produto_detalhe.php?id=" . $cd_produto;
                     
-                    // Usa a imagem do banco ou uma imagem de placeholder
+                    // Usa a imagem do banco
                     $ds_imagem = htmlspecialchars($produto['ds_imagem'] ?? 'placeholders/default.jpg'); 
-                    // Para acessibilidade
+
                     $preco_aria = str_replace('.', ' e ', str_replace(',', ' centavos', $vl_preco));
             ?>
             <div class="product-card">

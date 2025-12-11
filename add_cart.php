@@ -2,7 +2,7 @@
 include 'db_connect.php';
 session_start();
 
-// 1. VERIFICAÇÃO BÁSICA DE LOGIN (APENAS CLIENTE PODE COMPRAR)
+//  VERIFICAÇÃO BÁSICA DE LOGIN (APENAS CLIENTE PODE COMPRAR)
 if (!isset($_SESSION['logado']) || $_SESSION['tipo_usuario'] !== 'cliente') {
     // Redireciona para o login se não for um cliente logado
     header("Location: login_cliente.php?redirect=index.php");
@@ -12,7 +12,8 @@ if (!isset($_SESSION['logado']) || $_SESSION['tipo_usuario'] !== 'cliente') {
 $cd_cliente = $_SESSION['cd_usuario'];
 $mensagem = "";
 
-// 2. COLETA DE DADOS DO PRODUTO A SER ADICIONADO
+//  COLETA DE DADOS DO PRODUTO A SER ADICIONADO
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // ID do produto é obrigatório
     $cd_produto = isset($_POST['cd_produto']) ? intval($_POST['cd_produto']) : 0;
@@ -26,9 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
     
-    // =========================================================
-    // 3. INICIA OU RECUPERA O PEDIDO ATIVO (CARRINHO)
-    // =========================================================
+
+    //  INICIA OU RECUPERA O PEDIDO ATIVO (CARRINHO)
+
     if (!isset($_SESSION['cd_pedido_ativo'])) {
         
         // Insere um novo pedido no banco de dados, definindo o status
@@ -50,9 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $cd_pedido = $_SESSION['cd_pedido_ativo'];
 
-    // =========================================================
-    // 4. BUSCA DADOS ATUAIS DO PRODUTO (PREÇO E ESTOQUE)
-    // =========================================================
+
+    //  BUSCA DADOS ATUAIS DO PRODUTO (PREÇO E ESTOQUE)
+
     $sql_produto = "SELECT vl_preco, qt_estoque FROM produto WHERE cd_produto = ?";
     $stmt_produto = $mysqli->prepare($sql_produto);
     $stmt_produto->bind_param("i", $cd_produto);
@@ -71,9 +72,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt_produto->close();
 
 
-    // =========================================================
-    // 5. VERIFICA SE O PRODUTO JÁ ESTÁ NO CARRINHO
-    // =========================================================
+
+    // VERIFICA SE O PRODUTO JÁ ESTÁ NO CARRINHO
+
     $sql_item_existente = "SELECT qt_produto FROM itens WHERE cd_pedido = ? AND cd_produto = ?";
     $stmt_existente = $mysqli->prepare($sql_item_existente);
     $stmt_existente->bind_param("ii", $cd_pedido, $cd_produto);
@@ -89,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $qt_nova_total = $qt_atual_carrinho + $qt_adicionar;
 
-    // 6. VERIFICAÇÃO DE ESTOQUE
+    //  VERIFICAÇÃO DE ESTOQUE
     if ($qt_nova_total > $qt_estoque_atual) {
         $mensagem = "⚠️ Estoque insuficiente. Temos apenas {$qt_estoque_atual} unidades disponíveis.";
         header("Location: carrinho.php?erro=" . urlencode($mensagem));
@@ -97,9 +98,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
 
-    // =========================================================
-    // 7. INSERE OU ATUALIZA O ITEM NO CARRINHO (TABELA ITENS)
-    // =========================================================
+    //  INSERE OU ATUALIZA O ITEM NO CARRINHO (TABELA ITENS)
+
     $status_mensagem = "";
     if ($qt_atual_carrinho > 0) {
         // UPDATE: O item já existe, apenas atualiza a quantidade
@@ -121,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $status_mensagem = "Produto adicionado ao carrinho.";
     }
 
-    // Sucesso! Redireciona para o carrinho
+    // Redireciona para o carrinho
     $mysqli->close();
     header("Location: carrinho.php?status=" . urlencode($status_mensagem));
     exit();

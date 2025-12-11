@@ -43,19 +43,19 @@
             <div class="feedback-grid">
                 
                 <div class="feedback-card scroll-fade-up" data-delay="0.1">
-                    <p class="feedback-name">Cláudia N., Itanhaém</p>
+                    <p class="feedback-name">Cláudia N.</p>
                     <div class="stars">★★★★★</div>
                     <p class="feedback-text">"A variedade é incrível! Encontrei aquela torta da confeitaria Dona Marina que achei que estava fechada. A entrega foi super rápida. O CandyPlace realmente salvou minhas festas!"</p>
                 </div>
 
                 <div class="feedback-card scroll-fade-up" data-delay="0.3">
-                    <p class="feedback-name">João F., Peruíbe</p>
+                    <p class="feedback-name">João F.</p>
                     <div class="stars">★★★★★</div>
                     <p class="feedback-text">"Facilidade nota 10. Uso o app há meses e nunca tive problemas. O atendimento das lojas é excelente, e o sistema de rastreio funciona perfeitamente. Comprarei sempre aqui."</p>
                 </div>
 
                 <div class="feedback-card scroll-fade-up" data-delay="0.5">
-                    <p class="feedback-name">Sofia A., Mongaguá</p>
+                    <p class="feedback-name">Sofia A.</p>
                     <div class="stars">★★★★★</div>
                     <p class="feedback-text">"Finalmente um marketplace que valoriza o artesanal! Os doces são sempre fresquinhos e bem embalados. É meu novo lugar favorito para presentear e satisfazer a vontade de doce."</p>
                 </div>
@@ -91,19 +91,29 @@
     </section>
 
     <section class="section-storytelling parallax-bg" id="historia">
-        <div class="container">
-            <h2 class="section-title slide-up-element" style="color: var(--cor-fundo);">A História Que Nos Fez Nascer</h2>
-            
-            <div class="story-content scroll-fade-up">
-                <p class="narrative">Em meio à falta de incentivo e à crescente digitalização, muitos confeiteiros e pequenos negócios artesanais da nossa Baixada Santista estavam se tornando **invisíveis**. A **Confeitaria da Dona Marina** quase fechou as portas; a **Pastelaria da Ana** não conseguia clientes além do seu quarteirão.</p>
-                
-                <p class="narrative highlight-text">O CandyPlace nasceu da revolta por ver tanto talento e paixão se apagando. Não podíamos permitir que o sabor da nossa cidade fosse perdido.</p>
-                
-                <p class="narrative">Nossa missão foi clara: dar a essas famílias uma plataforma digital. De repente, a Dona Marina estava entregando tortas no bairro vizinho, e a Ana via seus pedidos triplicarem, salvando o sustento de suas famílias.</p>
-                
-                <p class="narrative">Somos mais que um marketplace; somos um **salvador de negócios locais**. Junte-se a esta comunidade que celebra cada doce e cada história de sucesso.</p>
-            </div>
-        </div>
+<div class="container">
+    <h2 class="section-title slide-up-element" style="color: var(--cor-fundo);">
+        A História Que Nos Fez Nascer: Salvando o Sabor Local
+    </h2>
+    
+    <div class="story-content scroll-fade-up">
+        <p class="narrative">
+            Em nossa amada Baixada Santista, e especialmente aqui em Itanhaém, os pequenos artesãos enfrentam uma luta constante. A dependência da sazonalidade do turismo e a dificuldade de acesso ao digital estavam tornando talentos incríveis invisíveis. Vimos a confeitaria da Dona Marina enfrentar momentos dificeis e a sorveteria do Seu Chico perder clientes por não ter como entregar.
+        </p>
+        
+        <p class="narrative highlight-text">
+            O CandyPlace nasceu da revolta por ver tanto talento, história e paixão se apagando. Não podíamos permitir que o sabor único da nossa região fosse perdido para a falta de incentivo digital.
+        </p>
+        
+        <p class="narrative">
+            Nossa missão foi clara: oferecer a essas famílias uma vitrine digital poderosa e acessível. De repente, a Dona Marina estava entregando suas tortas fora da temporada, e o Seu Chico via seus pedidos triplicarem, alcançando toda a cidade e salvando o sustento de suas famílias.
+        </p>
+        
+        <p class="narrative">
+            Somos mais que um marketplace; somos um motor de crescimento local. Junte-se a esta comunidade que celebra cada doce, valoriza o pequeno empreendedor de Itanhaém e transforma histórias de luta em sucesso digital.
+        </p>
+    </div>
+</div>
     </section>
 
     <section class="section-final-cta" id="cadastro">
